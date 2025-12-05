@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  />
+  <title>DBpedia Amharic Chapter</title>
+
+  <!-- Google Font for Ethiopic (optional; remove if hosting locally) -->
+  <link href="css/font.css" rel="stylesheet">
+
+  <!-- Bootstrap CSS (CDN) -->
+  <link
+    href="css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- Your custom styles -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- Fixed Header / Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#About">DBpedia Amharic</a>
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto" id="dynamicMenu"></ul>
+
+        <!-- Language dropdown -->
+        <div class="dropdown ms-3">
+          <button class="btn btn-light dropdown-toggle" type="button" id="langBtn" data-bs-toggle="dropdown" aria-expanded="false">
+            English
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langBtn" id="langDropdown"></ul>
+        </div>
+
+
+        <!-- Dark/Light toggle -->
+        <!-- <button class="btn btn-outline-light ms-2" id="themeToggle" title="Toggle dark mode">🌙</button> -->
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main content rendered by JS -->
+  <main id="app"></main>
+
+  <!-- Bootstrap Bundle with Popper (CDN) -->
+  <script
+    src="js/bootstrap.bundle.min.js"
+    defer
+  ></script>
+
+  <!-- App JS -->
+  <script src="data/content.js" defer></script>
+  <script src="js/app.js" defer></script>
+</body>
+</html>
