@@ -33,8 +33,7 @@ export async function renderResourcePreview(layout: AppLayout, url: URL): Promis
   copy.type = "button";
   copy.ariaLabel = "Copy RDF";
   copy.title = "Copy RDF";
-  copy.innerHTML =
-    '<svg aria-hidden="true" viewBox="0 0 512 512"><path fill="currentColor" d="M384 0H128C57.3 0 0 57.3 0 128v256h64V128c0-35.3 28.7-64 64-64h256V0zm64 128H192c-35.3 0-64 28.7-64 64v256c0 35.3 28.7 64 64 64h256c35.3 0 64-28.7 64-64V192c0-35.3-28.7-64-64-64zm0 320H192V192h256v256z"/></svg><span class="visually-hidden">Copy RDF</span>';
+  copy.innerHTML = copyButtonIcon(false);
   copy.disabled = true;
   const status = document.createElement("span");
   status.className = "status";
@@ -52,10 +51,12 @@ export async function renderResourcePreview(layout: AppLayout, url: URL): Promis
         () => {
           status.textContent = "Copied";
           copy.classList.add("resource-preview-page__copy--copied");
+          copy.innerHTML = copyButtonIcon(true);
           copy.ariaLabel = "Copied RDF";
           copy.title = "Copied";
           window.setTimeout(() => {
             copy.classList.remove("resource-preview-page__copy--copied");
+            copy.innerHTML = copyButtonIcon(false);
             copy.ariaLabel = "Copy RDF";
             copy.title = "Copy RDF";
             status.textContent = "";
@@ -69,6 +70,14 @@ export async function renderResourcePreview(layout: AppLayout, url: URL): Promis
   } catch (error) {
     code.textContent = error instanceof Error ? error.message : "Failed to load RDF preview";
   }
+}
+
+function copyButtonIcon(copied: boolean): string {
+  const path = copied
+    ? "M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"
+    : "M384 0H128C57.3 0 0 57.3 0 128v256h64V128c0-35.3 28.7-64 64-64h256V0zm64 128H192c-35.3 0-64 28.7-64 64v256c0 35.3 28.7 64 64 64h256c35.3 0 64-28.7 64-64V192c0-35.3-28.7-64-64-64zm0 320H192V192h256v256z";
+  const label = copied ? "Copied RDF" : "Copy RDF";
+  return `<svg aria-hidden="true" viewBox="0 0 512 512"><path fill="currentColor" d="${path}"/></svg><span class="visually-hidden">${label}</span>`;
 }
 
 function formatLabel(format: RawResourceFormat): string {

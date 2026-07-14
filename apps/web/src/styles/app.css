@@ -1248,15 +1248,20 @@ h3 {
 }
 
 .resource-preview-page__copy {
-  position: sticky;
-  top: 0;
+  position: absolute;
   z-index: 1;
-  float: right;
+  top: var(--space-4);
+  right: var(--space-4);
+  display: grid;
+  place-items: center;
   width: 2rem;
   height: 2rem;
+  margin: 0;
   border: 1px solid #3984e8;
+  border-radius: 4px;
   background: #12345a;
   color: #dbeafe;
+  padding: 0;
   line-height: 1;
 }
 
@@ -1269,6 +1274,12 @@ h3 {
   border-color: #41b883;
   background: #164b3a;
   color: #7ee2b8;
+}
+
+.resource-preview-page__copy:hover,
+.resource-preview-page__copy:focus-visible {
+  border-color: #8dbdff;
+  background: #1a4b80;
 }
 
 .visually-hidden {
