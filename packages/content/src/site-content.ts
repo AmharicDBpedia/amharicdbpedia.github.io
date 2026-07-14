@@ -383,6 +383,19 @@ export const contributors: readonly Contributor[] = [
 
 export const teamMembers: readonly TeamMember[] = [
   {
+    name: "Andargachew Asfaw",
+    role: {
+      en: "Mentor and GSoC contributor",
+      am: "መሪ አማካሪ እና የGSoC አስተዋጽዖ አበርካች",
+      de: "Mentor und GSoC-Mitwirkender",
+    },
+    affiliation: "Addis Ababa University",
+    status: "active",
+    period: "GSoC 2025",
+    image: "/assets/images/andargachew-asfaw.png",
+    href: "https://github.com/contact-andy/GSoC-25_DBpedia_Amharic_Chapter",
+  },
+  {
     name: "Hizkiel Mitiku Alemayehu",
     role: {
       en: "Mentor",

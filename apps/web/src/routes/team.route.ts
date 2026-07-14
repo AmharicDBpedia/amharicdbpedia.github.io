@@ -35,7 +35,7 @@ function memberSection(
   language: ReturnType<AppLayout["getLanguage"]>,
 ): HTMLElement {
   const section = document.createElement("section");
-  section.className = `team-group${label === "Active" ? " team-group--timeline" : ""}`;
+  section.className = "team-group";
   const heading = document.createElement("div");
   heading.className = "team-group__heading";
   const title = document.createElement("h2");
@@ -46,7 +46,7 @@ function memberSection(
   [...members]
     .sort((a, b) => a.name.localeCompare(b.name))
     .forEach((member) => {
-      const card = memberCard(member, language, label === "Active");
+      const card = memberCard(member, language);
       grid.append(card);
     });
   section.append(heading, grid);
@@ -56,10 +56,9 @@ function memberSection(
 function memberCard(
   member: (typeof teamMembers)[number],
   language: ReturnType<AppLayout["getLanguage"]>,
-  timeline: boolean,
 ): HTMLElement {
   const card = document.createElement("article");
-  card.className = `team-card${timeline ? " team-card--timeline" : ""}`;
+  card.className = "team-card";
   const period = document.createElement("p");
   period.className = "team-card__period";
   period.textContent = member.period;
@@ -87,7 +86,7 @@ function memberCard(
   affiliation.textContent = member.affiliation;
   content.append(name, role, affiliation);
   if (member.href) content.append(externalLink(member.href, "Profile"));
-  card.append(period, content);
+  card.append(content, period);
   return card;
 }
 
@@ -95,7 +94,7 @@ function contributorGrid(language: ReturnType<AppLayout["getLanguage"]>): HTMLEl
   const grid = document.createElement("div");
   grid.className = "contributor-grid";
   [...contributors]
-    .sort((a, b) => a.name.localeCompare(b.name))
+    .sort((a, b) => Number(a.year.replace(/\D/g, "")) - Number(b.year.replace(/\D/g, "")))
     .forEach((contributor) => {
       const card = document.createElement("article");
       card.className = "contributor-card";

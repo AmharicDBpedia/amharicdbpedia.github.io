@@ -1235,67 +1235,6 @@ h3 {
   letter-spacing: 0.04em;
 }
 
-.team-group--timeline .team-grid {
-  position: relative;
-  display: grid;
-  gap: var(--space-4);
-  padding: var(--space-5) 0 var(--space-5) 7rem;
-}
-
-.team-group--timeline .team-grid::before {
-  position: absolute;
-  top: var(--space-5);
-  bottom: var(--space-5);
-  left: 5.5rem;
-  width: 1px;
-  background: linear-gradient(var(--color-accent), var(--color-border));
-  content: "";
-}
-
-.team-card--timeline {
-  position: relative;
-  grid-template-columns: 1fr;
-  min-height: 150px;
-}
-
-.team-card--timeline::before {
-  position: absolute;
-  top: 2rem;
-  left: -1.78rem;
-  width: 0.65rem;
-  height: 0.65rem;
-  border: 3px solid var(--color-bg);
-  border-radius: 50%;
-  background: var(--color-accent);
-  box-shadow: 0 0 0 1px var(--color-accent);
-  content: "";
-}
-
-.team-card--timeline > .team-card__period {
-  position: absolute;
-  top: var(--space-5);
-  right: calc(100% + 1.5rem);
-  width: 5rem;
-  text-align: right;
-}
-
-.team-card--timeline .team-card__content {
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  column-gap: var(--space-4);
-}
-
-.team-card--timeline .team-card__content h3,
-.team-card--timeline .team-card__content p,
-.team-card--timeline .team-card__content a {
-  grid-column: 2;
-}
-
-.team-card--timeline .team-card__content .team-card__avatar {
-  grid-column: 1;
-  grid-row: 1 / span 5;
-}
-
 .people-strip {
   border-top: 3px solid var(--color-accent);
   background: var(--color-accent-soft);
@@ -1410,25 +1349,6 @@ h3 {
     align-items: start;
     flex-direction: column;
     gap: 0;
-  }
-
-  .team-group--timeline .team-grid {
-    padding-left: 0;
-  }
-
-  .team-group--timeline .team-grid::before,
-  .team-card--timeline::before {
-    display: none;
-  }
-
-  .team-card--timeline > .team-card__period {
-    position: static;
-    width: auto;
-    text-align: left;
-  }
-
-  .team-card--timeline .team-card__content {
-    grid-template-columns: auto 1fr;
   }
 
   .hero {
