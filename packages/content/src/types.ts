@@ -33,12 +33,16 @@ export interface Contributor {
   readonly year: string;
   readonly role: LocalizedText;
   readonly href: string;
+  readonly image?: string;
 }
 
 export interface TeamMember {
   readonly name: string;
   readonly role: LocalizedText;
   readonly affiliation: string;
+  readonly status: "active" | "previous";
+  readonly period: string;
+  readonly image?: string;
   readonly href?: string;
 }
 
