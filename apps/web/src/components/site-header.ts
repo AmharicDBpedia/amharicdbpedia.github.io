@@ -31,6 +31,18 @@ export function renderSiteHeader(props: SiteHeaderProps): HTMLElement {
   nav.className = "site-nav";
   nav.setAttribute("aria-label", "Primary");
 
+  const menuToggle = document.createElement("button");
+  menuToggle.className = "site-nav__toggle";
+  menuToggle.type = "button";
+  menuToggle.ariaLabel = "Open navigation";
+  menuToggle.ariaExpanded = "false";
+  menuToggle.innerHTML = "<span></span><span></span><span></span>";
+  menuToggle.addEventListener("click", () => {
+    const open = header.classList.toggle("site-header--menu-open");
+    menuToggle.ariaExpanded = String(open);
+    menuToggle.ariaLabel = open ? "Close navigation" : "Open navigation";
+  });
+
   for (const item of props.navigation) {
     if (item.href === "/tools") {
       const group = document.createElement("details");
@@ -78,7 +90,7 @@ export function renderSiteHeader(props: SiteHeaderProps): HTMLElement {
     nav.append(link);
   }
 
-  inner.append(brand, nav);
+  inner.append(brand, nav, menuToggle);
   header.append(inner);
   return header;
 }

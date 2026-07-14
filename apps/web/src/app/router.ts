@@ -108,6 +108,12 @@ export function installRouter(layout: AppLayout): void {
 }
 
 export async function navigate(href: string, layout: AppLayout, replace = false): Promise<void> {
+  const openMenu = document.querySelector<HTMLButtonElement>(".site-nav__toggle");
+  document.querySelector(".site-header")?.classList.remove("site-header--menu-open");
+  if (openMenu) {
+    openMenu.ariaExpanded = "false";
+    openMenu.ariaLabel = "Open navigation";
+  }
   document.querySelectorAll<HTMLDetailsElement>(".site-nav__group[open]").forEach((group) => {
     group.open = false;
   });

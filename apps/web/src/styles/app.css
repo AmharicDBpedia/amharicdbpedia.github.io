@@ -168,6 +168,23 @@ main {
   object-fit: contain;
 }
 
+.site-nav__toggle {
+  display: none;
+  width: 42px;
+  height: 38px;
+  padding: 0.55rem;
+}
+
+.site-nav__toggle span {
+  display: block;
+  height: 2px;
+  margin: 4px 0;
+  background: currentColor;
+  transition:
+    transform 160ms ease,
+    opacity 160ms ease;
+}
+
 main {
   flex: 1;
   padding: var(--space-7) 0;
@@ -1212,23 +1229,36 @@ h3 {
 }
 
 .resource-preview-page__content {
+  position: relative;
   max-height: 70vh;
   overflow: auto;
+  border: 1px solid #1e64c8;
+  background: #0d1b2a;
+  color: #dbeafe;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
 
-.resource-preview-page__actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-2);
+.resource-preview-page__content code {
+  display: block;
+  color: inherit;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  line-height: 1.55;
+  white-space: pre-wrap;
 }
 
-.resource-preview-page--light .resource-preview-page__content {
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text);
+.resource-preview-page__copy {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  float: right;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid #3984e8;
+  background: #12345a;
+  color: #dbeafe;
+  font-size: 1.1rem;
+  line-height: 1;
 }
 
 .visually-hidden {
@@ -1870,7 +1900,7 @@ h3 {
   color: var(--color-muted);
 }
 
-.resource-preview-page__actions .status {
+.resource-preview-page > .status {
   margin-left: var(--space-2);
 }
 
@@ -1889,21 +1919,30 @@ h3 {
 
 @media (max-width: 860px) {
   .site-header__inner {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr auto;
     gap: var(--space-3);
     padding: var(--space-3) 0;
   }
 
   .site-nav {
+    display: none;
+    grid-column: 1 / -1;
     width: 100%;
     align-items: stretch;
     gap: var(--space-2);
     justify-content: start;
   }
 
-  .site-nav > a,
-  .site-nav__group {
-    flex: 0 1 auto;
+  .site-header--menu-open .site-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .site-nav__toggle {
+    display: block;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
   }
 
   .site-nav > a,
@@ -1917,7 +1956,7 @@ h3 {
   }
 
   .site-nav__group[open] {
-    flex-basis: 100%;
+    grid-column: 1 / -1;
   }
 
   .site-nav__group-menu {
@@ -2083,14 +2122,8 @@ h3 {
     padding: 0;
   }
 
-  .site-nav {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .site-nav > a,
-  .site-nav__group,
-  .site-nav__group[open] {
+  .site-nav__group {
     width: 100%;
   }
 

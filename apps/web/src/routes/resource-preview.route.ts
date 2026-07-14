@@ -26,30 +26,25 @@ export async function renderResourcePreview(layout: AppLayout, url: URL): Promis
   description.textContent = `RDF preview for ${iri}`;
   const pre = document.createElement("pre");
   pre.className = "raw-panel resource-preview-page__content";
-  pre.textContent = "Loading RDF…";
-  const actions = document.createElement("div");
-  actions.className = "resource-preview-page__actions";
+  const code = document.createElement("code");
+  code.textContent = "Loading RDF…";
   const copy = document.createElement("button");
+  copy.className = "resource-preview-page__copy";
   copy.type = "button";
-  copy.textContent = "Copy RDF";
+  copy.ariaLabel = "Copy RDF";
+  copy.title = "Copy RDF";
+  copy.innerHTML = '<span aria-hidden="true">⧉</span><span class="visually-hidden">Copy RDF</span>';
   copy.disabled = true;
-  const theme = document.createElement("button");
-  theme.type = "button";
-  theme.textContent = "Use light theme";
   const status = document.createElement("span");
   status.className = "status";
-  actions.append(copy, theme, status);
-  theme.addEventListener("click", () => {
-    const light = section.classList.toggle("resource-preview-page--light");
-    theme.textContent = light ? "Use dark theme" : "Use light theme";
-  });
-  section.append(back, title, description, actions, pre);
+  pre.append(copy, code);
+  section.append(back, title, description, pre, status);
   layout.main.append(section);
 
   try {
     const raw = await loadRawResource(toIri(iri), format);
     const content = format === "jsonld" ? prettyJson(raw) : raw;
-    pre.textContent = content;
+    code.textContent = content;
     copy.disabled = false;
     copy.addEventListener("click", () => {
       void navigator.clipboard.writeText(content).then(
@@ -62,7 +57,7 @@ export async function renderResourcePreview(layout: AppLayout, url: URL): Promis
       );
     });
   } catch (error) {
-    pre.textContent = error instanceof Error ? error.message : "Failed to load RDF preview";
+    code.textContent = error instanceof Error ? error.message : "Failed to load RDF preview";
   }
 }
 
