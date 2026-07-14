@@ -74,6 +74,11 @@ const routes: readonly RouteDefinition[] = [
       import("../routes/resource-directory.route").then((m) => m.renderResourceDirectory(layout)),
   },
   {
+    pathname: "/resource-preview",
+    handler: (_params, url, layout) =>
+      import("../routes/resource-preview.route").then((m) => m.renderResourcePreview(layout, url)),
+  },
+  {
     pathname: "/resource/:title",
     handler: (params, _url, layout) =>
       import("../routes/resource.route").then((m) => m.renderResource(layout, params.title ?? "")),

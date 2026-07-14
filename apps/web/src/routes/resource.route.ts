@@ -1,5 +1,6 @@
 import { compactIri, type Iri, resourceToEgoGraph } from "@amdb/core";
 import type { AppLayout } from "../app/layout";
+import { appHref } from "../app/paths";
 import { renderPropertyTable } from "../components/property-table";
 import { clear, externalLink } from "../dom/html";
 import { renderEgoGraph } from "../features/graph/ego-graph";
@@ -70,7 +71,10 @@ export async function renderResource(layout: AppLayout, title: string): Promise<
       preview.type = "button";
       preview.textContent = `Preview ${format[1]}`;
       preview.addEventListener("click", () => {
-        void previewRaw(resource.iri, format[0]);
+        const previewUrl = appHref(
+          `/resource-preview?iri=${encodeURIComponent(resource.iri)}&format=${format[0]}`,
+        );
+        window.open(previewUrl, "_blank", "noopener,noreferrer");
       });
       const download = document.createElement("button");
       download.type = "button";
@@ -136,31 +140,6 @@ function renderNoFacts(iri: string): HTMLElement {
   return panel;
 }
 
-async function previewRaw(iri: Iri, format: RawResourceFormat): Promise<void> {
-  const preview = window.open("about:blank", "_blank");
-  if (!preview) {
-    window.alert("Allow pop-ups to preview this RDF document in a new tab.");
-    return;
-  }
-  preview.document.title = `Raw ${formatLabel(format)}`;
-  preview.document.body.textContent = "Loading raw RDF...";
-  try {
-    const raw = await loadRawResource(iri, format);
-    const content =
-      raw.trim().length > 0
-        ? format === "jsonld"
-          ? prettyJson(raw)
-          : raw
-        : `No ${formatLabel(format)} returned for ${iri}`;
-    const url = URL.createObjectURL(new Blob([content], { type: formatMime(format) }));
-    preview.location.href = url;
-    window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
-  } catch (error) {
-    preview.document.body.textContent =
-      error instanceof Error ? error.message : "Failed to load raw RDF";
-  }
-}
-
 async function downloadRaw(iri: Iri, format: RawResourceFormat): Promise<void> {
   try {
     const raw = await loadRawResource(iri, format);
@@ -175,15 +154,6 @@ async function downloadRaw(iri: Iri, format: RawResourceFormat): Promise<void> {
     const message = error instanceof Error ? error.message : "Failed to download RDF";
     window.alert(message);
   }
-}
-
-function formatLabel(format: RawResourceFormat): string {
-  return {
-    turtle: "Turtle",
-    jsonld: "JSON-LD",
-    ntriples: "N-Triples",
-    rdfxml: "RDF/XML",
-  }[format];
 }
 
 function formatExtension(format: RawResourceFormat): string {
@@ -202,12 +172,4 @@ function formatMime(format: RawResourceFormat): string {
 function resourceFileName(iri: Iri): string {
   const lastPart = iri.split("/").pop() ?? "resource";
   return decodeURIComponent(lastPart).replace(/[^\p{L}\p{N}._-]+/gu, "_");
-}
-
-function prettyJson(raw: string): string {
-  try {
-    return JSON.stringify(JSON.parse(raw), null, 2);
-  } catch {
-    return raw;
-  }
 }
