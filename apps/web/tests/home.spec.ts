@@ -14,21 +14,19 @@ test("renders chapter homepage and resource search", async ({ page }) => {
   await expect(page.getByLabel("Resource title or IRI")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Latest news" })).toBeVisible();
   await expect(page.locator(".news-item")).toHaveCount(3);
-  await expect(page.getByRole("link", { name: "News", exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "GitHub" })).toHaveAttribute(
-    "href",
-    "https://github.com/AmharicDBpedia",
-  );
+  await expect(page.getByRole("link", { name: "Tools & publications" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Docs" })).toBeVisible();
 });
 
-test("renders a dedicated news destination from the primary navigation", async ({ page }) => {
+test("renders the tools and publications destination from the primary navigation", async ({
+  page,
+}) => {
   await page.goto(appPath("/"));
-  await page.getByRole("link", { name: "News", exact: true }).click();
+  await page.getByRole("link", { name: "Tools & publications" }).click();
 
-  await expect(page).toHaveURL(new RegExp(`${appPath("/news")}$`));
-  await expect(page.getByRole("heading", { name: "News and project updates" })).toBeVisible();
-  await expect(page.getByText("Latest update")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Earlier updates" })).toBeVisible();
+  await expect(page).toHaveURL(new RegExp(`${appPath("/tools")}$`));
+  await expect(page.getByRole("heading", { name: "Tools & publications" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Release contents" })).toBeVisible();
 });
 
 test("embeds Tentris inside the SPARQL page", async ({ page }) => {
@@ -49,25 +47,12 @@ test("renders the non-technical about page", async ({ page }) => {
   await expect(page.getByText("Why Amharic needs its own chapter")).toBeVisible();
 });
 
-test("renders static statistics with clickable definitions", async ({ page }) => {
-  await page.goto(appPath("/statistics"));
+test("renders chapter statistics on the homepage", async ({ page }) => {
+  await page.goto(appPath("/#statistics"));
 
-  await expect(page.getByText("Latest generated extraction statistics")).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "How to read these numbers" })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Chapter at a glance" })).toBeVisible();
   await expect(page.getByText("97")).toBeVisible();
-  await page.getByRole("button", { name: /97\s+Mapped templates/i }).click();
-  await expect(page.getByRole("dialog", { name: "Mapped templates" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Open Amharic mappings" })).toHaveAttribute(
-    "href",
-    "https://mappings.dbpedia.org/index.php/Mapping_am",
-  );
-  await page.mouse.click(8, 8);
-  await expect(page.getByRole("dialog", { name: "Mapped templates" })).toHaveCount(0);
-  await page.getByRole("button", { name: /77.29%\s+Property coverage/i }).click();
-  await expect(page.getByRole("link", { name: "Open DBpedia ontology example" })).toHaveAttribute(
-    "href",
-    "https://mappings.dbpedia.org/index.php/OntologyClass%3APerson",
-  );
+  await expect(page.locator(".metric__meter")).toHaveCount(4);
 });
 
 test("renders a dedicated resource landing page", async ({ page }) => {

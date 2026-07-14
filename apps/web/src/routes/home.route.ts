@@ -31,8 +31,8 @@ export function renderHome(layout: AppLayout): void {
   sparqlLink.textContent = "Open SPARQL";
   const statsLink = document.createElement("a");
   statsLink.className = "button-link";
-  statsLink.href = appHref("/statistics");
-  statsLink.textContent = "View statistics";
+  statsLink.href = appHref("/#statistics");
+  statsLink.textContent = "See chapter stats";
   heroActions.append(sparqlLink, statsLink);
   copy.append(eyebrow, title, body, renderResourceSearch(layout), heroActions);
 
@@ -49,9 +49,21 @@ export function renderHome(layout: AppLayout): void {
 
   hero.append(copy, visual);
 
-  const metrics = document.createElement("section");
+  const statistics = document.createElement("section");
+  statistics.className = "home-statistics";
+  statistics.id = "statistics";
+  const statisticsHeader = document.createElement("div");
+  statisticsHeader.className = "home-statistics__header";
+  const statisticsTitle = document.createElement("h2");
+  statisticsTitle.textContent = "Chapter at a glance";
+  const statisticsIntro = document.createElement("p");
+  statisticsIntro.textContent =
+    "A compact view of the current Amharic DBpedia release. Each number points to a different layer of the graph.";
+  statisticsHeader.append(statisticsTitle, statisticsIntro);
+  const metrics = document.createElement("div");
   metrics.className = "metric-grid";
-  for (const metric of chapterMetrics) {
+  const progress = [97, 77.29, 99.15, 100];
+  for (const [index, metric] of chapterMetrics.entries()) {
     const article = document.createElement("article");
     article.className = `metric metric--${metric.tone ?? "primary"}`;
     const value = document.createElement("strong");
@@ -60,9 +72,21 @@ export function renderHome(layout: AppLayout): void {
     label.textContent = pickLocalized(metric.label, language) ?? "";
     const detail = document.createElement("p");
     detail.textContent = pickLocalized(metric.detail, language) ?? "";
-    article.append(value, label, detail);
+    const meter = document.createElement("div");
+    meter.className = "metric__meter";
+    meter.setAttribute("role", "progressbar");
+    meter.setAttribute("aria-label", `${metric.label.en} baseline`);
+    meter.setAttribute("aria-valuemin", "0");
+    meter.setAttribute("aria-valuemax", "100");
+    meter.setAttribute("aria-valuenow", String(progress[index] ?? 0));
+    const fill = document.createElement("span");
+    fill.className = "metric__meter-fill";
+    fill.style.width = `${progress[index] ?? 0}%`;
+    meter.append(fill);
+    article.append(value, label, meter, detail);
     metrics.append(article);
   }
+  statistics.append(statisticsHeader, metrics);
 
   const research = document.createElement("section");
   research.className = "insight-grid";
@@ -128,5 +152,5 @@ export function renderHome(layout: AppLayout): void {
     resources.append(card);
   }
 
-  layout.main.append(hero, metrics, research, news, resources);
+  layout.main.append(hero, statistics, research, news, resources);
 }

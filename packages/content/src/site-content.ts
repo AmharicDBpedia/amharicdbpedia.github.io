@@ -20,17 +20,12 @@ export const languages = {
 export const navigation: readonly NavItem[] = [
   { href: "/", label: { en: "Home", am: "መነሻ", de: "Start" } },
   { href: "/about", label: { en: "About", am: "ስለ ፕሮጀክቱ", de: "Über" } },
-  { href: "/news", label: { en: "News", am: "ዜና", de: "Aktuelles" } },
-  { href: "/statistics", label: { en: "Statistics", am: "ስታቲስቲክስ", de: "Statistik" } },
-  { href: "/datasets", label: { en: "Datasets", am: "ዳታሴቶች", de: "Datensätze" } },
-  { href: "/sparql", label: { en: "SPARQL", am: "SPARQL", de: "SPARQL" } },
-  { href: "/resource", label: { en: "Resource", am: "ምንጭ", de: "Ressource" } },
-  { href: "/team", label: { en: "Team", am: "ቡድን", de: "Team" } },
   {
-    href: "https://github.com/AmharicDBpedia",
-    label: { en: "GitHub", am: "GitHub", de: "GitHub" },
-    icon: "github",
+    href: "/tools",
+    label: { en: "Tools & publications", am: "Tools & publications", de: "Tools & Publikationen" },
   },
+  { href: "/docs", label: { en: "Docs", am: "Docs", de: "Dokumentation" } },
+  { href: "/team", label: { en: "Team", am: "ቡድን", de: "Team" } },
 ];
 
 export const chapterMetrics: readonly ChapterMetric[] = [
@@ -224,20 +219,20 @@ export const newsItems: readonly NewsItem[] = [
     },
     category: { en: "Release", am: "ሪሊዝ", de: "Release" },
     publishedAt: "2025-08-20",
-    href: "/statistics",
+    href: "/#statistics",
     actionLabel: {
-      en: "View statistics",
-      am: "ስታቲስቲክስ ይመልከቱ",
-      de: "Statistik ansehen",
+      en: "See chapter stats",
+      am: "See chapter stats",
+      de: "Kapitelstatistik ansehen",
     },
     links: [
       {
-        label: { en: "Statistics dashboard", am: "የስታቲስቲክስ ገጽ", de: "Statistik-Dashboard" },
-        href: "/statistics",
+        label: { en: "Chapter stats", am: "Chapter stats", de: "Kapitelstatistik" },
+        href: "/#statistics",
       },
       {
         label: { en: "Published datasets", am: "የታተሙ ዳታሴቶች", de: "Veroeffentlichte Datensaetze" },
-        href: "/datasets",
+        href: "/tools",
       },
     ],
   },

@@ -1,14 +1,10 @@
-import type { LocalizedText } from "@amdb/content";
-import { languages, type NavItem } from "@amdb/content";
-import type { SupportedLanguage } from "@amdb/core";
+import type { LocalizedText, NavItem } from "@amdb/content";
 import { appHref } from "../app/paths";
 
 type HeaderNavItem = NavItem & { readonly icon?: "github" };
 
 interface SiteHeaderProps {
   readonly navigation: readonly HeaderNavItem[];
-  readonly language: SupportedLanguage;
-  readonly onLanguageChange: (language: SupportedLanguage) => void;
   readonly localize: (value: LocalizedText) => string;
 }
 
@@ -57,21 +53,7 @@ export function renderSiteHeader(props: SiteHeaderProps): HTMLElement {
     nav.append(link);
   }
 
-  const language = document.createElement("select");
-  language.className = "language-select";
-  language.ariaLabel = "Language";
-  for (const [code, label] of Object.entries(languages)) {
-    const option = document.createElement("option");
-    option.value = code;
-    option.textContent = label;
-    option.selected = code === props.language;
-    language.append(option);
-  }
-  language.addEventListener("change", () => {
-    props.onLanguageChange(language.value as SupportedLanguage);
-  });
-
-  inner.append(brand, nav, language);
+  inner.append(brand, nav);
   header.append(inner);
   return header;
 }

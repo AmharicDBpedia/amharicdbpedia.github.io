@@ -83,8 +83,8 @@ export function renderAbout(layout: AppLayout): void {
 
   const action = document.createElement("a");
   action.className = "button-link button-link--primary";
-  action.href = appHref("/statistics");
-  action.textContent = "See the chapter statistics";
+  action.href = appHref("/tools");
+  action.textContent = "Explore tools and releases";
 
   section.append(title, intro, overview, why, steps, uses, action);
   layout.main.append(section);

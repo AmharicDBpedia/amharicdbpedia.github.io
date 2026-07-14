@@ -32,9 +32,9 @@ const routes: readonly RouteDefinition[] = [
       import("../routes/about.route").then((m) => m.renderAbout(layout)),
   },
   {
-    pathname: "/datasets",
+    pathname: "/docs",
     handler: (_params, _url, layout) =>
-      import("../routes/datasets.route").then((m) => m.renderDatasets(layout)),
+      import("../routes/docs.route").then((m) => m.renderDocs(layout)),
   },
   {
     pathname: "/news",
@@ -42,9 +42,9 @@ const routes: readonly RouteDefinition[] = [
       import("../routes/news.route").then((m) => m.renderNews(layout)),
   },
   {
-    pathname: "/statistics",
+    pathname: "/tools",
     handler: (_params, _url, layout) =>
-      import("../routes/statistics.route").then((m) => m.renderStatistics(layout)),
+      import("../routes/tools.route").then((m) => m.renderTools(layout)),
   },
   {
     pathname: "/query",

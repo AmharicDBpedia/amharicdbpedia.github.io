@@ -57,7 +57,7 @@ main {
 .site-header__inner {
   min-height: 72px;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr;
   gap: var(--space-5);
   align-items: center;
 }
@@ -112,14 +112,6 @@ main {
   width: 22px;
   height: 22px;
   object-fit: contain;
-}
-
-.language-select {
-  min-width: 112px;
-  height: 34px;
-  padding: 0 0.55rem;
-  align-self: center;
-  line-height: 1;
 }
 
 main {
@@ -282,6 +274,90 @@ h3 {
 .metric-grid--wide {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   margin: 0;
+}
+
+.home-statistics {
+  margin: var(--space-7) 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-6) 0;
+}
+
+.home-statistics__header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+
+.home-statistics__header h2,
+.home-statistics__header p {
+  margin-bottom: 0;
+}
+
+.home-statistics__header p {
+  max-width: 540px;
+  color: var(--color-muted);
+}
+
+.home-statistics .metric-grid {
+  margin: var(--space-5) 0 0;
+}
+
+.metric__meter {
+  height: 5px;
+  margin-top: var(--space-4);
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--color-border);
+}
+
+.metric .metric__meter-fill {
+  display: block;
+  height: 100%;
+  margin-top: 0;
+  border-radius: inherit;
+  background: currentColor;
+}
+
+.tools-page__section {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.tools-page__grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+}
+
+.resource-card--linked {
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.resource-card--linked:hover {
+  box-shadow: var(--shadow-crisp);
+  transform: translateY(-3px);
+}
+
+.doc-list__item {
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+  padding: var(--space-5);
+}
+
+.doc-list__item h2,
+.doc-list__item p {
+  margin-bottom: 0;
+}
+
+.doc-list__item p {
+  margin-top: var(--space-2);
+  color: var(--color-muted);
 }
 
 .resource-grid > h2 {
@@ -1343,6 +1419,11 @@ h3 {
   .doc-list,
   .statistics-explainer-grid {
     grid-template-columns: 1fr;
+  }
+
+  .home-statistics__header {
+    align-items: start;
+    flex-direction: column;
   }
 
   .team-group__heading {

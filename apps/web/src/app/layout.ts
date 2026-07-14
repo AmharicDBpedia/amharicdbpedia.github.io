@@ -9,11 +9,7 @@ export interface AppLayout {
   readonly getLanguage: () => SupportedLanguage;
 }
 
-export function createLayout(
-  root: HTMLElement,
-  initialLanguage: SupportedLanguage,
-  onLanguageChange: (language: SupportedLanguage) => void,
-): AppLayout {
+export function createLayout(root: HTMLElement, initialLanguage: SupportedLanguage): AppLayout {
   let language = initialLanguage;
 
   const shell = document.createElement("div");
@@ -33,12 +29,6 @@ export function createLayout(
   function renderHeader(): void {
     const header = renderSiteHeader({
       navigation,
-      language,
-      onLanguageChange: (next) => {
-        language = next;
-        renderHeader();
-        onLanguageChange(next);
-      },
       localize: (value) => pickLocalized(value, language) ?? "",
     });
 

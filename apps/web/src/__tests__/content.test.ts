@@ -2,12 +2,19 @@ import { navigation, newsItems } from "@amdb/content";
 import { describe, expect, it } from "vitest";
 
 describe("web content", () => {
-  it("exposes the resource viewer route", () => {
-    expect(navigation.map((item) => item.href)).toContain("/resource");
+  it("keeps the primary navigation focused", () => {
+    expect(navigation).toHaveLength(5);
+    expect(navigation.map((item) => item.href)).toEqual([
+      "/",
+      "/about",
+      "/tools",
+      "/docs",
+      "/team",
+    ]);
   });
 
-  it("exposes news as a primary navigation destination", () => {
-    expect(navigation.map((item) => item.href)).toContain("/news");
+  it("combines tools and publications into one destination", () => {
+    expect(navigation.map((item) => item.href)).toContain("/tools");
   });
 
   it("exposes about as a primary navigation destination", () => {
