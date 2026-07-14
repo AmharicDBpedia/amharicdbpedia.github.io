@@ -23,6 +23,8 @@ const DESCRIPTION_PREDICATES = new Set([
 ]);
 const TYPE_PREDICATE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 
+export type RawResourceFormat = "turtle" | "jsonld" | "ntriples" | "rdfxml";
+
 export async function loadResourceSummary(
   titleOrIri: string,
   signal?: AbortSignal,
@@ -75,13 +77,19 @@ export async function loadResourceSummary(
 
 export function loadRawResource(
   iri: Iri,
-  format: "turtle" | "jsonld",
+  format: RawResourceFormat,
   signal?: AbortSignal,
 ): Promise<string> {
   return describe(
     env.sparqlEndpoint,
     describeResourceQuery(iri),
-    format === "turtle" ? "text/turtle" : "application/ld+json",
+    format === "turtle"
+      ? "text/turtle"
+      : format === "jsonld"
+        ? "application/ld+json"
+        : format === "ntriples"
+          ? "application/n-triples"
+          : "application/rdf+xml",
     signal,
   );
 }

@@ -32,7 +32,7 @@ export async function select(
 export async function describe(
   endpoint: string,
   query: string,
-  accept: "text/turtle" | "application/ld+json",
+  accept: "text/turtle" | "application/ld+json" | "application/n-triples" | "application/rdf+xml",
   signal?: AbortSignal,
 ): Promise<string> {
   const url = new URL(endpoint);

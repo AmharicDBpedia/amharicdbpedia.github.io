@@ -84,14 +84,14 @@ export function renderHome(layout: AppLayout): void {
     edgeElement.className = `graph-map__edge ${edge}`;
     graph.append(edgeElement);
   }
-  for (const [index, node] of ["አማርኛ", "RDF", "OWL", "DBpedia", "Wiki", "SPARQL"].entries()) {
+  for (const [index, node] of ["Amharic", "RDF", "OWL", "DBpedia", "Wiki", "SPARQL"].entries()) {
     const nodeElement = document.createElement("span");
     nodeElement.className = `graph-map__node graph-map__node--${index + 1}`;
     nodeElement.textContent = node;
     graph.append(nodeElement);
   }
   const visualTitle = document.createElement("strong");
-  visualTitle.textContent = "አማርኛ DBpedia";
+  visualTitle.textContent = "Amharic Dbpedia";
   const visualBody = document.createElement("p");
   visualBody.textContent =
     "Wikipedia dumps + mappings + Amharic-aware parsers -> RDF knowledge graph";

@@ -110,6 +110,9 @@ export async function navigate(href: string, layout: AppLayout, replace = false)
   if (replace) history.replaceState({}, "", url);
   else history.pushState({}, "", url);
   await dispatch(url, layout);
+  if (url.hash) {
+    document.querySelector(url.hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 export async function dispatch(url: URL, layout: AppLayout): Promise<void> {

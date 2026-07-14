@@ -25,7 +25,10 @@ export function renderResourceSearch(layout: AppLayout): HTMLElement {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const value = input.value.trim();
-    if (!value) return;
+    if (!value) {
+      void navigate("/resource", layout);
+      return;
+    }
     void navigate(`/resource/${encodeURIComponent(value)}`, layout);
   });
 

@@ -115,7 +115,7 @@ export function renderDocs(layout: AppLayout): void {
     [
       "Contributor guide on GitHub",
       "Open the chapter repository and its contribution material on GitHub.",
-      "https://github.com/AmharicDBpedia/AmharicDBpediaChapter",
+      "https://github.com/AmharicDBpedia/AmharicDBpediaChapter/blob/main/CONTRIBUTING.md",
     ],
   ] as const;
   for (const [name, description, href] of referenceItems) {
