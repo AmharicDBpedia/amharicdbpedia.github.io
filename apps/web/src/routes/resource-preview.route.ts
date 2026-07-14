@@ -33,7 +33,8 @@ export async function renderResourcePreview(layout: AppLayout, url: URL): Promis
   copy.type = "button";
   copy.ariaLabel = "Copy RDF";
   copy.title = "Copy RDF";
-  copy.innerHTML = '<span aria-hidden="true">⧉</span><span class="visually-hidden">Copy RDF</span>';
+  copy.innerHTML =
+    '<svg aria-hidden="true" viewBox="0 0 512 512"><path fill="currentColor" d="M384 0H128C57.3 0 0 57.3 0 128v256h64V128c0-35.3 28.7-64 64-64h256V0zm64 128H192c-35.3 0-64 28.7-64 64v256c0 35.3 28.7 64 64 64h256c35.3 0 64-28.7 64-64V192c0-35.3-28.7-64-64-64zm0 320H192V192h256v256z"/></svg><span class="visually-hidden">Copy RDF</span>';
   copy.disabled = true;
   const status = document.createElement("span");
   status.className = "status";
@@ -50,6 +51,15 @@ export async function renderResourcePreview(layout: AppLayout, url: URL): Promis
       void navigator.clipboard.writeText(content).then(
         () => {
           status.textContent = "Copied";
+          copy.classList.add("resource-preview-page__copy--copied");
+          copy.ariaLabel = "Copied RDF";
+          copy.title = "Copied";
+          window.setTimeout(() => {
+            copy.classList.remove("resource-preview-page__copy--copied");
+            copy.ariaLabel = "Copy RDF";
+            copy.title = "Copy RDF";
+            status.textContent = "";
+          }, 1800);
         },
         () => {
           status.textContent = "Copy failed";

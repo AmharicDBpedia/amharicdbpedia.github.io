@@ -1257,8 +1257,18 @@ h3 {
   border: 1px solid #3984e8;
   background: #12345a;
   color: #dbeafe;
-  font-size: 1.1rem;
   line-height: 1;
+}
+
+.resource-preview-page__copy svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.resource-preview-page__copy--copied {
+  border-color: #41b883;
+  background: #164b3a;
+  color: #7ee2b8;
 }
 
 .visually-hidden {
