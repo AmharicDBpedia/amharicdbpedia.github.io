@@ -76,7 +76,58 @@ export function renderDocs(layout: AppLayout): void {
   const intro = document.createElement("p");
   intro.className = "lead";
   intro.textContent =
-    "A living timeline of the Amharic DBpedia implementation, from the first mapping work to the current research release.";
+    "A practical guide to using the website, followed by the implementation timeline from the first mapping work to the current research release.";
+
+  const guide = document.createElement("section");
+  guide.className = "docs-guide";
+  const guideTitle = document.createElement("h2");
+  guideTitle.textContent = "Use the website";
+  const guideIntro = document.createElement("p");
+  guideIntro.textContent =
+    "Start at Home for the chapter snapshot, then follow the path below depending on what you want to do.";
+  const guideSteps = document.createElement("div");
+  guideSteps.className = "docs-guide__steps";
+  const steps = [
+    [
+      "01",
+      "Find an entity",
+      "Use the resource search on Home or open Resources to browse Amharic DBpedia entities and inspect their RDF facts.",
+    ],
+    [
+      "02",
+      "Query the graph",
+      "Open SPARQL to run a bounded query against the public endpoint. Start with one of the examples, then refine it.",
+    ],
+    [
+      "03",
+      "Read the numbers",
+      "Click a statistic on Home to see its definition and source. Coverage describes mappings; triples describe released facts.",
+    ],
+    [
+      "04",
+      "Reuse the release",
+      "Use Publications for the paper, DICE Research endpoint, Databus collection, mappings wiki, and extraction framework.",
+    ],
+    [
+      "05",
+      "Contribute",
+      "Read the contributor guide and architecture notes before changing mappings, extraction behavior, or frontend routes.",
+    ],
+  ] as const;
+  for (const [number, headingText, bodyText] of steps) {
+    const step = document.createElement("article");
+    step.className = "docs-guide__step";
+    const numberElement = document.createElement("span");
+    numberElement.className = "docs-guide__number";
+    numberElement.textContent = number;
+    const heading = document.createElement("h3");
+    heading.textContent = headingText;
+    const body = document.createElement("p");
+    body.textContent = bodyText;
+    step.append(numberElement, heading, body);
+    guideSteps.append(step);
+  }
+  guide.append(guideTitle, guideIntro, guideSteps);
 
   const timeline = document.createElement("div");
   timeline.className = "docs-timeline";
@@ -112,6 +163,8 @@ export function renderDocs(layout: AppLayout): void {
     timeline.append(item);
   }
 
-  section.append(title, intro, timeline);
+  const timelineTitle = document.createElement("h2");
+  timelineTitle.textContent = "Implementation timeline";
+  section.append(title, intro, guide, timelineTitle, timeline);
   layout.main.append(section);
 }

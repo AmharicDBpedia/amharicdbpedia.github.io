@@ -6,6 +6,40 @@ import { renderNewsItem } from "../components/news-item";
 import { clear, externalLink } from "../dom/html";
 import { renderResourceSearch } from "../features/search/resource-search";
 
+interface MetricInsight {
+  readonly title: string;
+  readonly body: string;
+  readonly sourceLabel: string;
+  readonly sourceHref: string;
+}
+
+const metricInsights: readonly MetricInsight[] = [
+  {
+    title: "Mapped templates",
+    body: "A mapped template connects an Amharic Wikipedia infobox to DBpedia's shared ontology, turning recurring fields into structured RDF.",
+    sourceLabel: "Open Amharic mappings",
+    sourceHref: "https://mappings.dbpedia.org/index.php/Mapping_am",
+  },
+  {
+    title: "Property coverage",
+    body: "Property coverage measures how many distinct infobox fields were matched to DBpedia ontology properties.",
+    sourceLabel: "Open ontology example",
+    sourceHref: "https://mappings.dbpedia.org/index.php/OntologyClass%3APerson",
+  },
+  {
+    title: "Property occurrences",
+    body: "Occurrences count real uses of mapped fields across Amharic Wikipedia pages, showing how much published article data is covered.",
+    sourceLabel: "Open Amharic mappings",
+    sourceHref: "https://mappings.dbpedia.org/index.php/Mapping_am",
+  },
+  {
+    title: "Unique triples",
+    body: "A triple is one structured fact: subject, predicate, and object. Unique triples are the deduplicated facts in the release.",
+    sourceLabel: "Open Databus collection",
+    sourceHref: "https://databus.dbpedia.org/purplebee/collections/am_chapter/",
+  },
+];
+
 export function renderHome(layout: AppLayout): void {
   clear(layout.main);
   const language = layout.getLanguage();
@@ -65,7 +99,10 @@ export function renderHome(layout: AppLayout): void {
   const progress = [97, 77.29, 99.15, 100];
   for (const [index, metric] of chapterMetrics.entries()) {
     const article = document.createElement("article");
-    article.className = `metric metric--${metric.tone ?? "primary"}`;
+    article.className = `metric metric--${metric.tone ?? "primary"} metric--interactive`;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "metric__button";
     const value = document.createElement("strong");
     value.textContent = metric.value;
     const label = document.createElement("span");
@@ -83,7 +120,10 @@ export function renderHome(layout: AppLayout): void {
     fill.className = "metric__meter-fill";
     fill.style.width = `${progress[index] ?? 0}%`;
     meter.append(fill);
-    article.append(value, label, meter, detail);
+    button.append(value, label, meter, detail);
+    const insight = metricInsights[index];
+    if (insight) button.addEventListener("click", () => openMetricDialog(insight));
+    article.append(button);
     metrics.append(article);
   }
   statistics.append(statisticsHeader, metrics);
@@ -153,4 +193,34 @@ export function renderHome(layout: AppLayout): void {
   }
 
   layout.main.append(hero, statistics, research, news, resources);
+}
+
+function openMetricDialog(insight: MetricInsight): void {
+  document.querySelector("dialog.metric-dialog")?.remove();
+  const dialog = document.createElement("dialog");
+  dialog.className = "metric-dialog";
+  dialog.ariaLabel = insight.title;
+  const title = document.createElement("h2");
+  title.textContent = insight.title;
+  const body = document.createElement("p");
+  body.textContent = insight.body;
+  const actions = document.createElement("div");
+  actions.className = "metric-dialog__actions";
+  const source = document.createElement("a");
+  source.className = "button-link button-link--primary";
+  source.href = insight.sourceHref;
+  source.target = "_blank";
+  source.rel = "noreferrer";
+  source.textContent = insight.sourceLabel;
+  const close = document.createElement("button");
+  close.type = "button";
+  close.textContent = "Close";
+  close.addEventListener("click", () => dialog.close());
+  actions.append(source, close);
+  dialog.append(title, body, actions);
+  dialog.addEventListener("click", (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+  document.body.append(dialog);
+  dialog.showModal();
 }

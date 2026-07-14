@@ -52,6 +52,76 @@ export function renderAbout(layout: AppLayout): void {
   }
   steps.append(stepsTitle, list);
 
+  const timeline = document.createElement("section");
+  timeline.className = "about-timeline";
+  const timelineTitle = document.createElement("h2");
+  timelineTitle.textContent = "From chapter idea to reusable graph";
+  const timelineIntro = document.createElement("p");
+  timelineIntro.textContent =
+    "The work has moved through mentorship, mapping, extraction, publication, and the tools that make the result understandable.";
+  const timelineList = document.createElement("div");
+  timelineList.className = "about-timeline__list";
+  const milestones = [
+    {
+      date: "2024",
+      title: "Chapter foundation",
+      body: "The first GSoC cycle established the Amharic DBpedia workflow: work from Amharic Wikipedia, maintain template-to-ontology mappings, run extraction, and publish the resulting RDF artifacts.",
+      link: "https://github.com/Meti-Adane/GSOC-24_DBpedia_Amharic_Chapter",
+      linkLabel: "Open the 2024 project",
+    },
+    {
+      date: "2025",
+      title: "Mapping coverage becomes measurable",
+      body: "The chapter added a stronger mapping baseline, including complete template coverage reporting, property coverage, property occurrences, and a repeatable way to compare mapping improvements.",
+      link: "https://github.com/contact-andy/GSoC-25_DBpedia_Amharic_Chapter",
+      linkLabel: "Open the 2025 project",
+    },
+    {
+      date: "2025–2026",
+      title: "Extraction artifacts are published",
+      body: "The release path separated raw, metadata, and mapping-based artifacts, connected output to Databus, and documented the RDF pipeline so the generated graph can be downloaded and reused.",
+      link: "https://databus.dbpedia.org/purplebee/collections/am_chapter/",
+      linkLabel: "Open the Databus collection",
+    },
+    {
+      date: "2026",
+      title: "The graph becomes explorable",
+      body: "The website grew into a working interface for resource search, SPARQL, resource facts, predicate explanations, query examples, release statistics, and documentation for contributors.",
+      link: appHref("/docs"),
+      linkLabel: "Read the implementation docs",
+    },
+    {
+      date: "2026",
+      title: "Research release",
+      body: "The chapter’s extraction and mapping work was documented in the LREC 2026 research release, giving the community a citable account of the graph and its language-aware processing decisions.",
+      link: "https://lrec.elra.info/lrec2026-main-627",
+      linkLabel: "Read the LREC 2026 paper",
+    },
+  ];
+  for (const milestone of milestones) {
+    const item = document.createElement("article");
+    item.className = "about-timeline__item";
+    const date = document.createElement("span");
+    date.className = "about-timeline__date";
+    date.textContent = milestone.date;
+    const content = document.createElement("div");
+    const heading = document.createElement("h3");
+    heading.textContent = milestone.title;
+    const body = document.createElement("p");
+    body.textContent = milestone.body;
+    const link = document.createElement("a");
+    link.href = milestone.link;
+    if (milestone.link.startsWith("http")) {
+      link.target = "_blank";
+      link.rel = "noreferrer";
+    }
+    link.textContent = milestone.linkLabel;
+    content.append(heading, body, link);
+    item.append(date, content);
+    timelineList.append(item);
+  }
+  timeline.append(timelineTitle, timelineIntro, timelineList);
+
   const uses = document.createElement("section");
   uses.className = "insight-grid";
   const usesTitle = document.createElement("h2");
@@ -86,6 +156,6 @@ export function renderAbout(layout: AppLayout): void {
   action.href = appHref("/tools");
   action.textContent = "Explore tools and releases";
 
-  section.append(title, intro, overview, why, steps, uses, action);
+  section.append(title, intro, overview, why, steps, timeline, uses, action);
   layout.main.append(section);
 }

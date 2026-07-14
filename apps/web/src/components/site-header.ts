@@ -44,7 +44,6 @@ export function renderSiteHeader(props: SiteHeaderProps): HTMLElement {
         ["SPARQL", "/sparql"],
         ["News", "/news"],
         ["Resources", "/resource"],
-        ["Statistics", "/statistics"],
       ] as const) {
         const menuLink = document.createElement("a");
         menuLink.href = appHref(entry[1]);
@@ -53,6 +52,9 @@ export function renderSiteHeader(props: SiteHeaderProps): HTMLElement {
       }
       group.append(summary, menu);
       nav.append(group);
+      menu.addEventListener("click", () => {
+        group.open = false;
+      });
       continue;
     }
     const link = document.createElement("a");

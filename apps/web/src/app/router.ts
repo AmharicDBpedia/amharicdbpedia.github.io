@@ -47,11 +47,6 @@ const routes: readonly RouteDefinition[] = [
       import("../routes/tools.route").then((m) => m.renderTools(layout)),
   },
   {
-    pathname: "/statistics",
-    handler: (_params, _url, layout) =>
-      import("../routes/statistics.route").then((m) => m.renderStatistics(layout)),
-  },
-  {
     pathname: "/query",
     handler: (_params, _url, layout) =>
       import("../routes/query.route").then((m) => m.renderQuery(layout)),

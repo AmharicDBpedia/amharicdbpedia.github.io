@@ -26,7 +26,7 @@ test("renders the tools and publications destination from the primary navigation
 
   await expect(page).toHaveURL(new RegExp(`${appPath("/tools")}$`));
   await expect(page.getByRole("heading", { name: "Tools & publications" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Release contents" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Publications & releases" })).toBeVisible();
 });
 
 test("embeds Tentris inside the SPARQL page", async ({ page }) => {

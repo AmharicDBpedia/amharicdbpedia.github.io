@@ -1,4 +1,4 @@
-import { datasetArtifacts, resourceLinks } from "@amdb/content";
+import { resourceLinks } from "@amdb/content";
 import { AMHARIC_DATABUS_COLLECTION } from "@amdb/core";
 import type { AppLayout } from "../app/layout";
 import { appHref } from "../app/paths";
@@ -28,6 +28,12 @@ export function renderTools(layout: AppLayout): void {
       "Browse entities and open a resource facts page.",
       "/resource",
     ),
+    externalCard(
+      "Extraction Framework",
+      "The upstream framework that turns Wikipedia dumps into RDF.",
+      "https://github.com/dbpedia/extraction-framework",
+      "/assets/images/github-logo.png",
+    ),
   );
   tools.append(toolGrid);
 
@@ -41,7 +47,7 @@ export function renderTools(layout: AppLayout): void {
   );
   const publicationGrid = document.createElement("div");
   publicationGrid.className = "resource-grid tools-page__grid";
-  for (const link of resourceLinks) {
+  for (const link of resourceLinks.filter((item) => item.title.en !== "Extraction Framework")) {
     const card = document.createElement("article");
     card.className = "resource-card";
     if (link.image) {
@@ -58,33 +64,24 @@ export function renderTools(layout: AppLayout): void {
     card.append(cardTitle, description);
     publicationGrid.append(card);
   }
+  publicationGrid.append(
+    externalCard(
+      "LREC 2026 paper",
+      "The published research release describing the Amharic DBpedia chapter.",
+      "https://lrec.elra.info/lrec2026-main-627",
+    ),
+    externalCard(
+      "DICE Research dataset",
+      "Query the published Amharic DBpedia dataset through the DICE Research endpoint.",
+      "https://am.dbpedia.data.dice-research.org/ui",
+    ),
+  );
   publications.append(
     publicationGrid,
     externalLink(AMHARIC_DATABUS_COLLECTION, "Open the Amharic Databus collection"),
   );
 
-  const artifacts = document.createElement("section");
-  artifacts.className = "tools-page__section";
-  artifacts.append(
-    sectionHeading("Release contents", "The artifact families published for reuse."),
-  );
-  const list = document.createElement("ul");
-  list.className = "dataset-list";
-  for (const artifact of datasetArtifacts) {
-    const item = document.createElement("li");
-    const name = document.createElement("strong");
-    name.textContent = artifact.name;
-    const badge = document.createElement("span");
-    badge.className = `dataset-badge dataset-badge--${artifact.type}`;
-    badge.textContent = artifact.type;
-    const description = document.createElement("p");
-    description.textContent = artifact.description;
-    item.append(name, badge, description);
-    list.append(item);
-  }
-  artifacts.append(list);
-
-  section.append(title, intro, tools, publications, artifacts);
+  section.append(title, intro, tools, publications);
   layout.main.append(section);
 }
 
@@ -107,6 +104,28 @@ function internalCard(title: string, description: string, href: string): HTMLEle
   link.href = appHref(href);
   link.textContent = title;
   heading.append(link);
+  const body = document.createElement("p");
+  body.textContent = description;
+  card.append(heading, body);
+  return card;
+}
+
+function externalCard(
+  title: string,
+  description: string,
+  href: string,
+  imagePath?: string,
+): HTMLElement {
+  const card = document.createElement("article");
+  card.className = "resource-card resource-card--linked";
+  if (imagePath) {
+    const image = document.createElement("img");
+    image.src = appHref(imagePath);
+    image.alt = "";
+    card.append(image);
+  }
+  const heading = document.createElement("h3");
+  heading.append(externalLink(href, title));
   const body = document.createElement("p");
   body.textContent = description;
   card.append(heading, body);
