@@ -70,7 +70,7 @@ export async function renderResource(layout: AppLayout, title: string): Promise<
       preview.type = "button";
       preview.textContent = `Preview ${format[1]}`;
       preview.addEventListener("click", () => {
-        void showRaw(section, resource.iri, format[0]);
+        void previewRaw(resource.iri, format[0]);
       });
       const download = document.createElement("button");
       download.type = "button";
@@ -136,29 +136,28 @@ function renderNoFacts(iri: string): HTMLElement {
   return panel;
 }
 
-async function showRaw(section: HTMLElement, iri: Iri, format: RawResourceFormat): Promise<void> {
-  const existing = section.querySelector(".raw-panel");
-  existing?.remove();
-
-  const panel = document.createElement("section");
-  panel.className = "raw-panel";
-  const title = document.createElement("h2");
-  title.textContent = `Raw ${formatLabel(format)}`;
-  const pre = document.createElement("pre");
-  pre.textContent = "Loading raw RDF...";
-  panel.append(title, pre);
-  section.prepend(panel);
-
+async function previewRaw(iri: Iri, format: RawResourceFormat): Promise<void> {
+  const preview = window.open("about:blank", "_blank");
+  if (!preview) {
+    window.alert("Allow pop-ups to preview this RDF document in a new tab.");
+    return;
+  }
+  preview.document.title = `Raw ${formatLabel(format)}`;
+  preview.document.body.textContent = "Loading raw RDF...";
   try {
     const raw = await loadRawResource(iri, format);
-    pre.textContent =
+    const content =
       raw.trim().length > 0
         ? format === "jsonld"
           ? prettyJson(raw)
           : raw
         : `No ${formatLabel(format)} returned for ${iri}`;
+    const url = URL.createObjectURL(new Blob([content], { type: formatMime(format) }));
+    preview.location.href = url;
+    window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
   } catch (error) {
-    pre.textContent = error instanceof Error ? error.message : "Failed to load raw RDF";
+    preview.document.body.textContent =
+      error instanceof Error ? error.message : "Failed to load raw RDF";
   }
 }
 

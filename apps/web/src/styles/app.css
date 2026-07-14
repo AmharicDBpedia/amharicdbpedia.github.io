@@ -1940,8 +1940,17 @@ h3 {
   }
 
   .tentris-frame {
-    height: 680px;
-    min-height: 680px;
+    height: 520px;
+    min-height: 520px;
+  }
+
+  .endpoint-panel,
+  .sparql-workbench {
+    padding: var(--space-4);
+  }
+
+  .sparql-workbench textarea {
+    min-height: 180px;
   }
 
   h1 {
@@ -1952,5 +1961,10 @@ h3 {
 @media (max-width: 520px) {
   .resource-search {
     grid-template-columns: 1fr;
+  }
+
+  .tentris-frame {
+    height: 440px;
+    min-height: 440px;
   }
 }
