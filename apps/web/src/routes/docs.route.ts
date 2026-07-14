@@ -113,19 +113,9 @@ export function renderDocs(layout: AppLayout): void {
       "https://github.com/AmharicDBpedia/AmharicDBpediaChapter/wiki",
     ],
     [
-      "Contributor guide",
-      "The contribution workflow for mappings, code, and documentation.",
-      "/docs/contributor-guide",
-    ],
-    [
-      "Architecture",
-      "The boundaries between the website, APIs, extraction, and graph services.",
-      "/docs/architecture",
-    ],
-    [
-      "RDF pipeline",
-      "How Wikipedia input becomes Amharic DBpedia RDF output.",
-      "/docs/rdf-pipeline",
+      "Contributor guide on GitHub",
+      "Open the chapter repository and its contribution material on GitHub.",
+      "https://github.com/AmharicDBpedia/AmharicDBpediaChapter",
     ],
   ] as const;
   for (const [name, description, href] of referenceItems) {
