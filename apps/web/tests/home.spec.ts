@@ -1,3 +1,4 @@
+import type { Page } from "@playwright/test";
 import { expect, test } from "@playwright/test";
 
 const configuredBaseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:5174";
@@ -8,13 +9,21 @@ function appPath(path: string): string {
   return basePath === "/" ? path : `${basePath}${path.replace(/^\//, "")}`;
 }
 
+async function openMobileNavigation(page: Page): Promise<void> {
+  const toggle = page.locator(".site-nav__toggle");
+  if (await toggle.isVisible()) await toggle.click();
+  const group = page.locator(".site-nav__group");
+  if ((await group.getAttribute("open")) === null) await group.locator("summary").click();
+}
+
 test("renders chapter homepage and resource search", async ({ page }) => {
   await page.goto(appPath("/"));
+  await openMobileNavigation(page);
   await expect(page.getByRole("heading", { name: "Amharic DBpedia Chapter" })).toBeVisible();
   await expect(page.getByLabel("Resource title or IRI")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Latest news" })).toBeVisible();
   await expect(page.locator(".news-item")).toHaveCount(3);
-  await expect(page.getByText("Tools & publications", { exact: true })).toBeVisible();
+  await expect(page.locator(".site-nav__group > summary")).toContainText("Tools & publications");
   await expect(page.getByRole("link", { name: "Docs" })).toBeVisible();
 });
 
@@ -22,7 +31,8 @@ test("renders the tools and publications destination from the primary navigation
   page,
 }) => {
   await page.goto(appPath("/"));
-  await page.getByText("Tools & publications", { exact: true }).click();
+  await openMobileNavigation(page);
+  await page.getByRole("link", { name: "Tools & publications", exact: true }).click();
 
   await expect(page).toHaveURL(new RegExp(`${appPath("/tools")}$`));
   await expect(page.getByRole("heading", { name: "Tools & publications" })).toBeVisible();
