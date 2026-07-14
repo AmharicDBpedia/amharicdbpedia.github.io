@@ -26,6 +26,15 @@ export const navigation: readonly NavItem[] = [
   },
   { href: "/docs", label: { en: "Docs", am: "Docs", de: "Dokumentation" } },
   { href: "/team", label: { en: "Team", am: "ቡድን", de: "Team" } },
+  {
+    href: "https://github.com/AmharicDBpedia",
+    label: {
+      en: "Amharic DBpedia on GitHub",
+      am: "Amharic DBpedia on GitHub",
+      de: "Amharic DBpedia auf GitHub",
+    },
+    icon: "github",
+  },
 ];
 
 export const chapterMetrics: readonly ChapterMetric[] = [

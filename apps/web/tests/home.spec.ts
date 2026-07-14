@@ -14,7 +14,7 @@ test("renders chapter homepage and resource search", async ({ page }) => {
   await expect(page.getByLabel("Resource title or IRI")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Latest news" })).toBeVisible();
   await expect(page.locator(".news-item")).toHaveCount(3);
-  await expect(page.getByRole("link", { name: "Tools & publications" })).toBeVisible();
+  await expect(page.getByText("Tools & publications", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "Docs" })).toBeVisible();
 });
 
@@ -22,7 +22,7 @@ test("renders the tools and publications destination from the primary navigation
   page,
 }) => {
   await page.goto(appPath("/"));
-  await page.getByRole("link", { name: "Tools & publications" }).click();
+  await page.getByText("Tools & publications", { exact: true }).click();
 
   await expect(page).toHaveURL(new RegExp(`${appPath("/tools")}$`));
   await expect(page.getByRole("heading", { name: "Tools & publications" })).toBeVisible();

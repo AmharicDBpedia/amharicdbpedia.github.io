@@ -3,13 +3,14 @@ import { describe, expect, it } from "vitest";
 
 describe("web content", () => {
   it("keeps the primary navigation focused", () => {
-    expect(navigation).toHaveLength(5);
+    expect(navigation).toHaveLength(6);
     expect(navigation.map((item) => item.href)).toEqual([
       "/",
       "/about",
       "/tools",
       "/docs",
       "/team",
+      "https://github.com/AmharicDBpedia",
     ]);
   });
 
