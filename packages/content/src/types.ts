@@ -31,14 +31,14 @@ export interface QueryExample {
 export interface Contributor {
   readonly name: string;
   readonly year: string;
-  readonly role: LocalizedText;
+  readonly role: string;
   readonly href: string;
   readonly image?: string;
 }
 
 export interface TeamMember {
   readonly name: string;
-  readonly role: LocalizedText;
+  readonly role: string;
   readonly affiliation: string;
   readonly status: "active" | "previous";
   readonly period: string;

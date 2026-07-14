@@ -1,11 +1,9 @@
 import { contributors, teamMembers } from "@amdb/content";
-import { pickLocalized } from "@amdb/core";
 import type { AppLayout } from "../app/layout";
 import { clear, externalLink } from "../dom/html";
 
 export function renderTeam(layout: AppLayout): void {
   clear(layout.main);
-  const language = layout.getLanguage();
 
   const section = document.createElement("section");
   section.className = "page-section";
@@ -14,26 +12,19 @@ export function renderTeam(layout: AppLayout): void {
   const previous = teamMembers.filter((member) => member.status === "previous");
   const sections = document.createElement("div");
   sections.className = "team-sections";
-  sections.append(
-    memberSection("Active", active, language),
-    memberSection("Alumni", previous, language),
-  );
+  sections.append(memberSection("Active", active), memberSection("Alumni", previous));
 
   const gsoc = document.createElement("section");
   gsoc.className = "people-strip";
   const gsocTitle = document.createElement("h2");
   gsocTitle.textContent = "GSoC contributors";
-  gsoc.append(gsocTitle, contributorGrid(language));
+  gsoc.append(gsocTitle, contributorGrid());
 
   section.append(sections, gsoc);
   layout.main.append(section);
 }
 
-function memberSection(
-  label: string,
-  members: typeof teamMembers,
-  language: ReturnType<AppLayout["getLanguage"]>,
-): HTMLElement {
+function memberSection(label: string, members: typeof teamMembers): HTMLElement {
   const section = document.createElement("section");
   section.className = "team-group";
   const heading = document.createElement("div");
@@ -46,17 +37,14 @@ function memberSection(
   [...members]
     .sort((a, b) => a.name.localeCompare(b.name))
     .forEach((member) => {
-      const card = memberCard(member, language);
+      const card = memberCard(member);
       grid.append(card);
     });
   section.append(heading, grid);
   return section;
 }
 
-function memberCard(
-  member: (typeof teamMembers)[number],
-  language: ReturnType<AppLayout["getLanguage"]>,
-): HTMLElement {
+function memberCard(member: (typeof teamMembers)[number]): HTMLElement {
   const card = document.createElement("article");
   card.className = "team-card";
   const period = document.createElement("p");
@@ -81,7 +69,7 @@ function memberCard(
   name.textContent = member.name;
   const role = document.createElement("p");
   role.className = "team-card__role";
-  role.textContent = pickLocalized(member.role, language) ?? "";
+  role.textContent = member.role;
   const affiliation = document.createElement("p");
   affiliation.textContent = member.affiliation;
   content.append(name, role, affiliation);
@@ -90,7 +78,7 @@ function memberCard(
   return card;
 }
 
-function contributorGrid(language: ReturnType<AppLayout["getLanguage"]>): HTMLElement {
+function contributorGrid(): HTMLElement {
   const grid = document.createElement("div");
   grid.className = "contributor-grid";
   [...contributors]
@@ -111,7 +99,7 @@ function contributorGrid(language: ReturnType<AppLayout["getLanguage"]>): HTMLEl
       year.textContent = contributor.year;
       const link = externalLink(contributor.href, contributor.name);
       const role = document.createElement("p");
-      role.textContent = pickLocalized(contributor.role, language) ?? "";
+      role.textContent = contributor.role;
       card.append(year, link, role);
       grid.append(card);
     });

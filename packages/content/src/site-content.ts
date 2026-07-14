@@ -361,21 +361,21 @@ export const contributors: readonly Contributor[] = [
   {
     name: "Natnael Yohanes",
     year: "GSoC 2026",
-    role: { en: "GSoC contributor", am: "የGSoC አስተዋጽዖ አበርካች", de: "GSoC-Mitwirkender" },
+    role: "GSoC contributor",
     href: "https://nama21yo.github.io/natnael-work/blog/gsoc/2026/",
     image: "/assets/images/natnael-yohanes.webp",
   },
   {
     name: "Andargachew Asfaw",
     year: "GSoC 2025",
-    role: { en: "GSoC contributor", am: "የGSoC አስተዋጽዖ አበርካች", de: "GSoC-Mitwirkender" },
+    role: "GSoC contributor",
     href: "https://github.com/contact-andy/GSoC-25_DBpedia_Amharic_Chapter",
     image: "/assets/images/andargachew-asfaw.png",
   },
   {
     name: "Meti Bayissa",
     year: "GSoC 2024",
-    role: { en: "GSoC contributor", am: "የGSoC አስተዋጽዖ አበርካች", de: "GSoC-Mitwirkende" },
+    role: "GSoC contributor",
     href: "https://github.com/Meti-Adane/GSOC-24_DBpedia_Amharic_Chapter",
     image: "/assets/images/meti-bayissa.jpg",
   },
@@ -384,24 +384,16 @@ export const contributors: readonly Contributor[] = [
 export const teamMembers: readonly TeamMember[] = [
   {
     name: "Andargachew Asfaw",
-    role: {
-      en: "Mentor and GSoC contributor",
-      am: "መሪ አማካሪ እና የGSoC አስተዋጽዖ አበርካች",
-      de: "Mentor und GSoC-Mitwirkender",
-    },
+    role: "Mentor and GSoC contributor",
     affiliation: "Addis Ababa University",
     status: "active",
-    period: "GSoC 2025",
+    period: "2025–present",
     image: "/assets/images/andargachew-asfaw.png",
     href: "https://github.com/contact-andy/GSoC-25_DBpedia_Amharic_Chapter",
   },
   {
     name: "Hizkiel Mitiku Alemayehu",
-    role: {
-      en: "Mentor",
-      am: "መሪ አማካሪ",
-      de: "Mentor",
-    },
+    role: "Mentor",
     affiliation: "Paderborn University",
     status: "active",
     period: "2024–present",
@@ -410,11 +402,7 @@ export const teamMembers: readonly TeamMember[] = [
   },
   {
     name: "Tilahun Abedissa Taffa",
-    role: {
-      en: "Mentor",
-      am: "መሪ አማካሪ",
-      de: "Mentor",
-    },
+    role: "Mentor",
     affiliation: "University of Hamburg / Leuphana University",
     status: "active",
     period: "2024–present",
@@ -423,11 +411,7 @@ export const teamMembers: readonly TeamMember[] = [
   },
   {
     name: "Meti Bayissa",
-    role: {
-      en: "GSoC contributor and mentor",
-      am: "የGSoC አስተዋጽዖ አበርካች እና መሪ አማካሪ",
-      de: "GSoC-Mitwirkende und Mentorin",
-    },
+    role: "GSoC contributor and mentor",
     affiliation: "Addis Ababa University",
     status: "previous",
     period: "GSoC 2024",
@@ -436,11 +420,7 @@ export const teamMembers: readonly TeamMember[] = [
   },
   {
     name: "Prof. Dr. Ricardo Usbeck",
-    role: {
-      en: "Mentor",
-      am: "መሪ አማካሪ",
-      de: "Mentor",
-    },
+    role: "Mentor",
     affiliation: "Leuphana University of Lueneburg",
     status: "active",
     period: "2024–present",
@@ -449,7 +429,7 @@ export const teamMembers: readonly TeamMember[] = [
   },
   {
     name: "Prof. Dr. Axel-Cyrille Ngonga Ngomo",
-    role: { en: "Mentor", am: "መሪ አማካሪ", de: "Mentor" },
+    role: "Mentor",
     affiliation: "Paderborn University",
     status: "active",
     period: "2024–present",
@@ -458,7 +438,7 @@ export const teamMembers: readonly TeamMember[] = [
   },
   {
     name: "Dr. Hamada M. Zahera",
-    role: { en: "Mentor", am: "መሪ አማካሪ", de: "Mentor" },
+    role: "Mentor",
     affiliation: "Paderborn University",
     status: "previous",
     period: "2024–2025",
