@@ -71,7 +71,15 @@ export function renderHome(layout: AppLayout): void {
   copy.append(eyebrow, title, body, renderResourceSearch(layout), heroActions);
 
   const visual = document.createElement("div");
-  visual.className = "hero__visual";
+  visual.className = "hero__visual hero__visual--graph";
+  const graph = document.createElement("div");
+  graph.className = "graph-map";
+  for (const node of ["አማርኛ", "RDF", "OWL", "DBpedia", "Wiki", "SPARQL"]) {
+    const nodeElement = document.createElement("span");
+    nodeElement.className = "graph-map__node";
+    nodeElement.textContent = node;
+    graph.append(nodeElement);
+  }
   const visualTitle = document.createElement("strong");
   visualTitle.textContent = "አማርኛ DBpedia";
   const visualBody = document.createElement("p");
@@ -79,7 +87,7 @@ export function renderHome(layout: AppLayout): void {
     "Wikipedia dumps + mappings + Amharic-aware parsers -> RDF knowledge graph";
   const visualFooter = document.createElement("span");
   visualFooter.textContent = "528,370 unique triples";
-  visual.append(visualTitle, visualBody, visualFooter);
+  visual.append(graph, visualTitle, visualBody, visualFooter);
 
   hero.append(copy, visual);
 
@@ -96,7 +104,6 @@ export function renderHome(layout: AppLayout): void {
   statisticsHeader.append(statisticsTitle, statisticsIntro);
   const metrics = document.createElement("div");
   metrics.className = "metric-grid";
-  const progress = [97, 77.29, 99.15, 100];
   for (const [index, metric] of chapterMetrics.entries()) {
     const article = document.createElement("article");
     article.className = `metric metric--${metric.tone ?? "primary"} metric--interactive`;
@@ -109,18 +116,7 @@ export function renderHome(layout: AppLayout): void {
     label.textContent = pickLocalized(metric.label, language) ?? "";
     const detail = document.createElement("p");
     detail.textContent = pickLocalized(metric.detail, language) ?? "";
-    const meter = document.createElement("div");
-    meter.className = "metric__meter";
-    meter.setAttribute("role", "progressbar");
-    meter.setAttribute("aria-label", `${metric.label.en} baseline`);
-    meter.setAttribute("aria-valuemin", "0");
-    meter.setAttribute("aria-valuemax", "100");
-    meter.setAttribute("aria-valuenow", String(progress[index] ?? 0));
-    const fill = document.createElement("span");
-    fill.className = "metric__meter-fill";
-    fill.style.width = `${progress[index] ?? 0}%`;
-    meter.append(fill);
-    button.append(value, label, meter, detail);
+    button.append(value, label, detail);
     const insight = metricInsights[index];
     if (insight) button.addEventListener("click", () => openMetricDialog(insight));
     article.append(button);

@@ -52,7 +52,7 @@ test("renders chapter statistics on the homepage", async ({ page }) => {
 
   await expect(page.getByRole("heading", { name: "Chapter at a glance" })).toBeVisible();
   await expect(page.getByText("97")).toBeVisible();
-  await expect(page.locator(".metric__meter")).toHaveCount(4);
+  await expect(page.locator(".metric--interactive")).toHaveCount(4);
 });
 
 test("renders a dedicated resource landing page", async ({ page }) => {

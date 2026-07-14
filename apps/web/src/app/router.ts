@@ -96,6 +96,9 @@ export function installRouter(layout: AppLayout): void {
 }
 
 export async function navigate(href: string, layout: AppLayout, replace = false): Promise<void> {
+  document.querySelectorAll<HTMLDetailsElement>(".site-nav__group[open]").forEach((group) => {
+    group.open = false;
+  });
   const url = new URL(appHref(href), window.location.origin);
   if (replace) history.replaceState({}, "", url);
   else history.pushState({}, "", url);
