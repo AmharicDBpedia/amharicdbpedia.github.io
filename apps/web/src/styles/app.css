@@ -1902,6 +1902,34 @@ h3 {
     position: static;
   }
 
+  .hero__visual {
+    min-height: 360px;
+    padding: var(--space-4);
+  }
+
+  .graph-map {
+    min-height: 190px;
+  }
+
+  .graph-map__node {
+    width: 48px;
+    height: 48px;
+    font-size: 0.62rem;
+  }
+
+  .graph-map__node--6 {
+    width: 42px;
+    height: 42px;
+  }
+
+  .hero__visual strong {
+    font-size: 2rem;
+  }
+
+  .hero__visual p {
+    font-size: 0.98rem;
+  }
+
   .news-item--archive {
     grid-template-columns: 1fr;
   }
