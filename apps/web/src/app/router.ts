@@ -37,6 +37,13 @@ const routes: readonly RouteDefinition[] = [
       import("../routes/docs.route").then((m) => m.renderDocs(layout)),
   },
   {
+    pathname: "/docs/:slug",
+    handler: (params, _url, layout) =>
+      import("../routes/docs-detail.route").then((m) =>
+        m.renderDocsDetail(layout, params.slug ?? ""),
+      ),
+  },
+  {
     pathname: "/news",
     handler: (_params, _url, layout) =>
       import("../routes/news.route").then((m) => m.renderNews(layout)),

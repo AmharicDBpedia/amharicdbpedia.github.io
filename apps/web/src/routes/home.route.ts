@@ -74,9 +74,19 @@ export function renderHome(layout: AppLayout): void {
   visual.className = "hero__visual hero__visual--graph";
   const graph = document.createElement("div");
   graph.className = "graph-map";
-  for (const node of ["አማርኛ", "RDF", "OWL", "DBpedia", "Wiki", "SPARQL"]) {
+  for (const edge of [
+    "graph-map__edge--one",
+    "graph-map__edge--two",
+    "graph-map__edge--three",
+    "graph-map__edge--four",
+  ]) {
+    const edgeElement = document.createElement("span");
+    edgeElement.className = `graph-map__edge ${edge}`;
+    graph.append(edgeElement);
+  }
+  for (const [index, node] of ["አማርኛ", "RDF", "OWL", "DBpedia", "Wiki", "SPARQL"].entries()) {
     const nodeElement = document.createElement("span");
-    nodeElement.className = "graph-map__node";
+    nodeElement.className = `graph-map__node graph-map__node--${index + 1}`;
     nodeElement.textContent = node;
     graph.append(nodeElement);
   }
@@ -85,9 +95,7 @@ export function renderHome(layout: AppLayout): void {
   const visualBody = document.createElement("p");
   visualBody.textContent =
     "Wikipedia dumps + mappings + Amharic-aware parsers -> RDF knowledge graph";
-  const visualFooter = document.createElement("span");
-  visualFooter.textContent = "528,370 unique triples";
-  visual.append(graph, visualTitle, visualBody, visualFooter);
+  visual.append(graph, visualTitle, visualBody);
 
   hero.append(copy, visual);
 

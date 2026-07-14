@@ -65,6 +65,38 @@ export function renderDocs(layout: AppLayout): void {
   }
   guide.append(guideTitle, guideIntro, guideSteps);
 
+  const examples = document.createElement("section");
+  examples.className = "docs-examples";
+  const examplesTitle = document.createElement("h2");
+  examplesTitle.textContent = "Three useful first steps";
+  const examplesGrid = document.createElement("div");
+  examplesGrid.className = "docs-examples__grid";
+  const examplesData = [
+    [
+      "Search",
+      "Type an Amharic title or full resource IRI into Home search. Open a result to see labels, links, and predicates.",
+    ],
+    [
+      "Query",
+      "In SPARQL, begin with SELECT ?s WHERE { ?s ?p ?o } LIMIT 10. Keep a LIMIT while exploring, then add a resource or predicate filter.",
+    ],
+    [
+      "Read RDF",
+      "Read a triple as subject → predicate → object. A property page explains what the predicate means and shows how it is used in this graph.",
+    ],
+  ] as const;
+  for (const [titleText, bodyText] of examplesData) {
+    const card = document.createElement("article");
+    card.className = "docs-example";
+    const cardTitle = document.createElement("h3");
+    cardTitle.textContent = titleText;
+    const cardBody = document.createElement("p");
+    cardBody.textContent = bodyText;
+    card.append(cardTitle, cardBody);
+    examplesGrid.append(card);
+  }
+  examples.append(examplesTitle, examplesGrid);
+
   const references = document.createElement("section");
   references.className = "docs-references";
   const referencesTitle = document.createElement("h2");
@@ -83,17 +115,17 @@ export function renderDocs(layout: AppLayout): void {
     [
       "Contributor guide",
       "The contribution workflow for mappings, code, and documentation.",
-      "/docs/contributor-guide.md",
+      "/docs/contributor-guide",
     ],
     [
       "Architecture",
       "The boundaries between the website, APIs, extraction, and graph services.",
-      "/docs/architecture.md",
+      "/docs/architecture",
     ],
     [
       "RDF pipeline",
       "How Wikipedia input becomes Amharic DBpedia RDF output.",
-      "/docs/rdf-pipeline.md",
+      "/docs/rdf-pipeline",
     ],
   ] as const;
   for (const [name, description, href] of referenceItems) {
@@ -102,8 +134,10 @@ export function renderDocs(layout: AppLayout): void {
     const heading = document.createElement("h3");
     const link = document.createElement("a");
     link.href = href.startsWith("/") ? appHref(href) : href;
-    link.target = "_blank";
-    link.rel = "noreferrer";
+    if (!href.startsWith("/")) {
+      link.target = "_blank";
+      link.rel = "noreferrer";
+    }
     link.textContent = name;
     heading.append(link);
     const body = document.createElement("p");
@@ -113,6 +147,6 @@ export function renderDocs(layout: AppLayout): void {
   }
   references.append(referencesTitle, referencesIntro, referencesGrid);
 
-  section.append(title, intro, guide, references);
+  section.append(title, intro, guide, examples, references);
   layout.main.append(section);
 }
