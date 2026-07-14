@@ -2,7 +2,7 @@ import { queryExamples } from "@amdb/content";
 import { pickLocalized } from "@amdb/core";
 import { env } from "../app/env";
 import type { AppLayout } from "../app/layout";
-import { clear, externalLink } from "../dom/html";
+import { appendIconLabel, clear, externalLink } from "../dom/html";
 import { select } from "../services/sparql.service";
 
 export function renderQuery(layout: AppLayout): void {
@@ -85,7 +85,7 @@ export function renderQuery(layout: AppLayout): void {
   controls.className = "query-controls";
   const run = document.createElement("button");
   run.type = "button";
-  run.textContent = "Run query";
+  appendIconLabel(run, "play", "Run query");
   const status = document.createElement("span");
   status.className = "status";
   controls.append(run, status);
@@ -111,7 +111,7 @@ export function renderQuery(layout: AppLayout): void {
     pre.append(code);
     const load = document.createElement("button");
     load.type = "button";
-    load.textContent = "Load example";
+    appendIconLabel(load, "code", "Load example");
     load.addEventListener("click", () => {
       textarea.value = example.query;
       textarea.focus();

@@ -1,6 +1,6 @@
 import type { AppLayout } from "../app/layout";
 import { appHref } from "../app/paths";
-import { clear } from "../dom/html";
+import { appendIconLabel, clear } from "../dom/html";
 
 export function renderAbout(layout: AppLayout): void {
   clear(layout.main);
@@ -154,7 +154,7 @@ export function renderAbout(layout: AppLayout): void {
   const action = document.createElement("a");
   action.className = "button-link button-link--primary";
   action.href = appHref("/tools");
-  action.textContent = "Explore tools and releases";
+  appendIconLabel(action, "arrow-right", "Explore tools and releases");
 
   section.append(title, intro, overview, why, steps, timeline, uses, action);
   layout.main.append(section);

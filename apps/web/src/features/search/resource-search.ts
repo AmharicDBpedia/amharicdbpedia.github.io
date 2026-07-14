@@ -1,5 +1,6 @@
 import type { AppLayout } from "../../app/layout";
 import { navigate } from "../../app/router";
+import { appendIconLabel } from "../../dom/html";
 
 export function renderResourceSearch(layout: AppLayout): HTMLElement {
   const form = document.createElement("form");
@@ -19,7 +20,7 @@ export function renderResourceSearch(layout: AppLayout): HTMLElement {
 
   const button = document.createElement("button");
   button.type = "submit";
-  button.textContent = "Open";
+  appendIconLabel(button, "arrow-right", "Open");
 
   form.append(label, input, button);
   form.addEventListener("submit", (event) => {

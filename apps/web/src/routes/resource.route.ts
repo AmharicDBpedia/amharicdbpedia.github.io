@@ -2,7 +2,7 @@ import { compactIri, type Iri, resourceToEgoGraph } from "@amdb/core";
 import type { AppLayout } from "../app/layout";
 import { appHref } from "../app/paths";
 import { renderPropertyTable } from "../components/property-table";
-import { clear, externalLink } from "../dom/html";
+import { appendIconLabel, clear, externalLink } from "../dom/html";
 import { renderEgoGraph } from "../features/graph/ego-graph";
 import { renderResourceSearch } from "../features/search/resource-search";
 import {
@@ -87,7 +87,7 @@ export async function renderResource(layout: AppLayout, title: string): Promise<
       name.textContent = format[1];
       const preview = document.createElement("button");
       preview.type = "button";
-      preview.textContent = "Preview";
+      appendIconLabel(preview, "eye", "Preview");
       preview.addEventListener("click", () => {
         const previewUrl = appHref(
           `/resource-preview?iri=${encodeURIComponent(resource.iri)}&format=${format[0]}`,
@@ -97,7 +97,7 @@ export async function renderResource(layout: AppLayout, title: string): Promise<
       const download = document.createElement("button");
       download.type = "button";
       download.className = "button-link button-link--primary";
-      download.textContent = "Download";
+      appendIconLabel(download, "download", "Download");
       download.addEventListener("click", () => {
         void downloadRaw(resource.iri, format[0]);
       });

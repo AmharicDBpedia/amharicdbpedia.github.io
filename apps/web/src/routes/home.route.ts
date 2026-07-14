@@ -3,7 +3,7 @@ import { pickLocalized } from "@amdb/core";
 import type { AppLayout } from "../app/layout";
 import { appHref } from "../app/paths";
 import { renderNewsItem } from "../components/news-item";
-import { clear, externalLink } from "../dom/html";
+import { appendIconLabel, clear, externalLink, faIcon } from "../dom/html";
 import { renderResourceSearch } from "../features/search/resource-search";
 
 interface MetricInsight {
@@ -62,11 +62,11 @@ export function renderHome(layout: AppLayout): void {
   const sparqlLink = document.createElement("a");
   sparqlLink.className = "button-link button-link--primary";
   sparqlLink.href = appHref("/sparql");
-  sparqlLink.textContent = "Open SPARQL";
+  appendIconLabel(sparqlLink, "code", "Open SPARQL");
   const statsLink = document.createElement("a");
   statsLink.className = "button-link";
   statsLink.href = appHref("/#statistics");
-  statsLink.textContent = "See chapter stats";
+  appendIconLabel(statsLink, "chart-line", "See chapter stats");
   heroActions.append(sparqlLink, statsLink);
   copy.append(eyebrow, title, body, renderResourceSearch(layout), heroActions);
 
@@ -98,7 +98,7 @@ export function renderHome(layout: AppLayout): void {
     graph.append(nodeElement);
   }
   const visualTitle = document.createElement("strong");
-  visualTitle.textContent = "Amharic Dbpedia";
+  visualTitle.append(faIcon("database"), document.createTextNode("Amharic Dbpedia"));
   const visualBody = document.createElement("p");
   visualBody.textContent =
     "Wikipedia dumps + mappings + Amharic-aware parsers -> RDF knowledge graph";
@@ -170,7 +170,7 @@ export function renderHome(layout: AppLayout): void {
   const newsArchive = document.createElement("a");
   newsArchive.className = "button-link";
   newsArchive.href = appHref("/news");
-  newsArchive.textContent = "View all news";
+  appendIconLabel(newsArchive, "arrow-right", "View all news");
   newsHeader.append(newsCopy, newsArchive);
 
   const newsGrid = document.createElement("div");
@@ -225,7 +225,7 @@ function openMetricDialog(insight: MetricInsight): void {
   source.textContent = insight.sourceLabel;
   const close = document.createElement("button");
   close.type = "button";
-  close.textContent = "Close";
+  appendIconLabel(close, "right-from-bracket", "Close");
   close.addEventListener("click", () => dialog.close());
   actions.append(source, close);
   dialog.append(title, body, actions);

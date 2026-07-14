@@ -1,5 +1,6 @@
 import type { LocalizedText, NavItem } from "@amdb/content";
 import { appHref } from "../app/paths";
+import { faIcon } from "../dom/html";
 
 type HeaderNavItem = NavItem & { readonly icon?: "github" };
 
@@ -48,7 +49,7 @@ export function renderSiteHeader(props: SiteHeaderProps): HTMLElement {
       const group = document.createElement("details");
       group.className = "site-nav__group";
       const summary = document.createElement("summary");
-      summary.textContent = props.localize(item.label);
+      summary.append(faIcon("database"), document.createTextNode(props.localize(item.label)));
       const menu = document.createElement("div");
       menu.className = "site-nav__group-menu";
       for (const entry of [

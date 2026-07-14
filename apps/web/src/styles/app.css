@@ -451,6 +451,32 @@ h3 {
   text-decoration: none;
 }
 
+.ui-icon {
+  width: 0.9em;
+  height: 0.9em;
+  flex: 0 0 auto;
+  vertical-align: -0.08em;
+}
+
+.button-link,
+.resource-page button,
+.query-example button,
+.metric-dialog button,
+.docs-page a {
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ui-icon--back {
+  transform: rotate(180deg);
+}
+
+.site-nav summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
 .button-link--primary {
   border-color: var(--color-primary);
   background: var(--color-primary);

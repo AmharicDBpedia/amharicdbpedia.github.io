@@ -1,6 +1,6 @@
 import type { AppLayout } from "../app/layout";
 import { appHref } from "../app/paths";
-import { clear } from "../dom/html";
+import { appendIconLabel, clear } from "../dom/html";
 
 const documents: Readonly<Record<string, { title: string; file: string }>> = {
   architecture: { title: "Architecture", file: "architecture.md" },
@@ -29,7 +29,8 @@ export async function renderDocsDetail(layout: AppLayout, slug: string): Promise
   section.className = "page-section doc-reader";
   const back = document.createElement("a");
   back.href = appHref("/docs");
-  back.textContent = "← Back to Docs";
+  appendIconLabel(back, "arrow-right", "Back to Docs");
+  back.querySelector(".ui-icon")?.classList.add("ui-icon--back");
   const title = document.createElement("h1");
   title.textContent = documentInfo.title;
   const content = document.createElement("article");
