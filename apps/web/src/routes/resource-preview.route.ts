@@ -4,7 +4,7 @@ import { appHref } from "../app/paths";
 import { clear } from "../dom/html";
 import { loadRawResource, type RawResourceFormat } from "../services/resource.service";
 
-const formats = new Set<RawResourceFormat>(["turtle", "jsonld", "ntriples", "rdfxml"]);
+const formats = new Set<RawResourceFormat>(["turtle", "jsonld", "ntriples"]);
 
 export async function renderResourcePreview(layout: AppLayout, url: URL): Promise<void> {
   clear(layout.main);
@@ -27,19 +27,47 @@ export async function renderResourcePreview(layout: AppLayout, url: URL): Promis
   const pre = document.createElement("pre");
   pre.className = "raw-panel resource-preview-page__content";
   pre.textContent = "Loading RDF…";
-  section.append(back, title, description, pre);
+  const actions = document.createElement("div");
+  actions.className = "resource-preview-page__actions";
+  const copy = document.createElement("button");
+  copy.type = "button";
+  copy.textContent = "Copy RDF";
+  copy.disabled = true;
+  const theme = document.createElement("button");
+  theme.type = "button";
+  theme.textContent = "Use light theme";
+  const status = document.createElement("span");
+  status.className = "status";
+  actions.append(copy, theme, status);
+  theme.addEventListener("click", () => {
+    const light = section.classList.toggle("resource-preview-page--light");
+    theme.textContent = light ? "Use dark theme" : "Use light theme";
+  });
+  section.append(back, title, description, actions, pre);
   layout.main.append(section);
 
   try {
     const raw = await loadRawResource(toIri(iri), format);
-    pre.textContent = format === "jsonld" ? prettyJson(raw) : raw;
+    const content = format === "jsonld" ? prettyJson(raw) : raw;
+    pre.textContent = content;
+    copy.disabled = false;
+    copy.addEventListener("click", () => {
+      void navigator.clipboard.writeText(content).then(
+        () => {
+          status.textContent = "Copied";
+        },
+        () => {
+          status.textContent = "Copy failed";
+        },
+      );
+    });
   } catch (error) {
     pre.textContent = error instanceof Error ? error.message : "Failed to load RDF preview";
   }
 }
 
 function formatLabel(format: RawResourceFormat): string {
-  return { turtle: "Turtle", jsonld: "JSON-LD", ntriples: "N-Triples", rdfxml: "RDF/XML" }[format];
+  return { turtle: "Turtle", jsonld: "JSON-LD", ntriples: "N-Triples" }[format];
 }
 
 function prettyJson(raw: string): string {

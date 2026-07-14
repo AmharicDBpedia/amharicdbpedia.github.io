@@ -23,7 +23,7 @@ const DESCRIPTION_PREDICATES = new Set([
 ]);
 const TYPE_PREDICATE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 
-export type RawResourceFormat = "turtle" | "jsonld" | "ntriples" | "rdfxml";
+export type RawResourceFormat = "turtle" | "jsonld" | "ntriples";
 
 export async function loadResourceSummary(
   titleOrIri: string,
@@ -87,9 +87,7 @@ export function loadRawResource(
       ? "text/turtle"
       : format === "jsonld"
         ? "application/ld+json"
-        : format === "ntriples"
-          ? "application/n-triples"
-          : "application/rdf+xml",
+        : "application/n-triples",
     signal,
   );
 }

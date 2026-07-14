@@ -59,17 +59,35 @@ export async function renderResource(layout: AppLayout, title: string): Promise<
       header.append(description);
     }
 
-    const rawActions = document.createElement("div");
+    const rawActions = document.createElement("table");
     rawActions.className = "raw-actions";
+    const caption = document.createElement("caption");
+    caption.className = "visually-hidden";
+    caption.textContent = "RDF representations";
+    const head = document.createElement("thead");
+    head.className = "visually-hidden";
+    const headRow = document.createElement("tr");
+    for (const heading of ["Format", "Preview", "Download"]) {
+      const cell = document.createElement("th");
+      cell.scope = "col";
+      cell.textContent = heading;
+      headRow.append(cell);
+    }
+    head.append(headRow);
+    const body = document.createElement("tbody");
+    rawActions.append(caption, head, body);
     for (const format of [
       ["turtle", "Turtle (.ttl)"],
       ["jsonld", "JSON-LD (.jsonld)"],
       ["ntriples", "N-Triples (.nt)"],
-      ["rdfxml", "RDF/XML (.rdf)"],
     ] as const) {
+      const row = document.createElement("tr");
+      const name = document.createElement("th");
+      name.scope = "row";
+      name.textContent = format[1];
       const preview = document.createElement("button");
       preview.type = "button";
-      preview.textContent = `Preview ${format[1]}`;
+      preview.textContent = "Preview";
       preview.addEventListener("click", () => {
         const previewUrl = appHref(
           `/resource-preview?iri=${encodeURIComponent(resource.iri)}&format=${format[0]}`,
@@ -79,11 +97,16 @@ export async function renderResource(layout: AppLayout, title: string): Promise<
       const download = document.createElement("button");
       download.type = "button";
       download.className = "button-link button-link--primary";
-      download.textContent = `Download ${format[1]}`;
+      download.textContent = "Download";
       download.addEventListener("click", () => {
         void downloadRaw(resource.iri, format[0]);
       });
-      rawActions.append(preview, download);
+      const previewCell = document.createElement("td");
+      previewCell.append(preview);
+      const downloadCell = document.createElement("td");
+      downloadCell.append(download);
+      row.append(name, previewCell, downloadCell);
+      body.append(row);
     }
     header.append(rawActions);
 
@@ -157,7 +180,7 @@ async function downloadRaw(iri: Iri, format: RawResourceFormat): Promise<void> {
 }
 
 function formatExtension(format: RawResourceFormat): string {
-  return { turtle: "ttl", jsonld: "jsonld", ntriples: "nt", rdfxml: "rdf" }[format];
+  return { turtle: "ttl", jsonld: "jsonld", ntriples: "nt" }[format];
 }
 
 function formatMime(format: RawResourceFormat): string {
@@ -165,7 +188,6 @@ function formatMime(format: RawResourceFormat): string {
     turtle: "text/turtle",
     jsonld: "application/ld+json",
     ntriples: "application/n-triples",
-    rdfxml: "application/rdf+xml",
   }[format];
 }
 

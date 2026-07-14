@@ -32,14 +32,13 @@ export async function select(
 export async function describe(
   endpoint: string,
   query: string,
-  accept: "text/turtle" | "application/ld+json" | "application/n-triples" | "application/rdf+xml",
+  accept: "text/turtle" | "application/ld+json" | "application/n-triples",
   signal?: AbortSignal,
 ): Promise<string> {
   const formatNames: Record<typeof accept, readonly string[]> = {
     "text/turtle": ["text/turtle", "ttl"],
     "application/ld+json": ["application/ld+json", "jsonld"],
     "application/n-triples": ["application/n-triples", "ntriples"],
-    "application/rdf+xml": ["application/rdf+xml", "rdf"],
   };
   let lastError = "DESCRIBE request failed";
   for (const format of [...formatNames[accept], undefined]) {
