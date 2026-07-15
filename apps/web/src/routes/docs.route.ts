@@ -12,7 +12,7 @@ export function renderDocs(layout: AppLayout): void {
   const intro = document.createElement("p");
   intro.className = "lead";
   intro.textContent =
-    "A practical map of the website: where to search, query, understand, download, and contribute to Amharic DBpedia.";
+    "A practical map of the website: where to search, query, reuse, and contribute to Amharic DBpedia.";
 
   const guide = document.createElement("section");
   guide.className = "docs-guide";
@@ -28,29 +28,28 @@ export function renderDocs(layout: AppLayout): void {
       "01",
       "Find an entity",
       "Use Home search or Resources to browse Amharic DBpedia entities and inspect their RDF facts.",
+      "/resource",
     ],
     [
       "02",
       "Query the graph",
       "Open SPARQL, start with an example, and run bounded queries against the public endpoint.",
+      "/sparql",
     ],
     [
       "03",
-      "Understand a number",
-      "Click a Home statistic to open its definition and source. Coverage describes mappings; triples describe facts.",
+      "Reuse the release",
+      "Use Resources for the paper, DICE Research endpoint, Databus, mappings wiki, and extraction framework.",
+      "/tools",
     ],
     [
       "04",
-      "Reuse the release",
-      "Use Tools & publications for the paper, DICE Research endpoint, Databus, mappings wiki, and extraction framework.",
-    ],
-    [
-      "05",
       "Contribute",
       "Read the contributor guide and architecture notes before changing mappings, extraction behavior, or routes.",
+      "https://github.com/AmharicDBpedia/AmharicDBpediaChapter/blob/main/CONTRIBUTING.md",
     ],
   ] as const;
-  for (const [number, headingText, bodyText] of steps) {
+  for (const [number, headingText, bodyText, href] of steps) {
     const step = document.createElement("article");
     step.className = "docs-guide__step";
     const numberElement = document.createElement("span");
@@ -60,7 +59,14 @@ export function renderDocs(layout: AppLayout): void {
     heading.textContent = headingText;
     const body = document.createElement("p");
     body.textContent = bodyText;
-    step.append(numberElement, heading, body);
+    const link = document.createElement("a");
+    link.href = href.startsWith("/") ? appHref(href) : href;
+    if (!href.startsWith("/")) {
+      link.target = "_blank";
+      link.rel = "noreferrer";
+    }
+    link.textContent = `Open ${headingText}`;
+    step.append(numberElement, heading, body, link);
     guideSteps.append(step);
   }
   guide.append(guideTitle, guideIntro, guideSteps);

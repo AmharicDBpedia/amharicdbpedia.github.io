@@ -34,12 +34,9 @@ function memberSection(label: string, members: typeof teamMembers): HTMLElement 
   heading.append(title);
   const grid = document.createElement("div");
   grid.className = "team-grid";
-  [...members]
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .forEach((member) => {
-      const card = memberCard(member);
-      grid.append(card);
-    });
+  members.forEach((member) => {
+    grid.append(memberCard(member));
+  });
   section.append(heading, grid);
   return section;
 }
@@ -52,19 +49,6 @@ function memberCard(member: (typeof teamMembers)[number]): HTMLElement {
   period.textContent = member.period;
   const content = document.createElement("div");
   content.className = "team-card__content";
-  const avatar = document.createElement("div");
-  avatar.className = "team-card__avatar";
-  if (member.image) {
-    const portrait = document.createElement("img");
-    portrait.className = "team-card__avatar team-card__avatar--image";
-    portrait.src = member.image;
-    portrait.alt = `${member.name} profile photo`;
-    portrait.loading = "lazy";
-    content.append(portrait);
-  } else {
-    avatar.textContent = initials(member.name);
-    content.append(avatar);
-  }
   const name = document.createElement("h3");
   name.textContent = member.name;
   const role = document.createElement("p");
@@ -73,7 +57,7 @@ function memberCard(member: (typeof teamMembers)[number]): HTMLElement {
   const affiliation = document.createElement("p");
   affiliation.textContent = member.affiliation;
   content.append(name, role, affiliation);
-  if (member.href) content.append(externalLink(member.href, "Profile"));
+  if (member.href) content.append(externalLink(member.href, "University profile"));
   card.append(content, period);
   return card;
 }
@@ -86,14 +70,6 @@ function contributorGrid(): HTMLElement {
     .forEach((contributor) => {
       const card = document.createElement("article");
       card.className = "contributor-card";
-      if (contributor.image) {
-        const image = document.createElement("img");
-        image.className = "contributor-card__image";
-        image.src = contributor.image;
-        image.alt = `${contributor.name} profile photo`;
-        image.loading = "lazy";
-        card.append(image);
-      }
       const year = document.createElement("span");
       year.className = "contributor-card__year";
       year.textContent = contributor.year;
@@ -104,13 +80,4 @@ function contributorGrid(): HTMLElement {
       grid.append(card);
     });
   return grid;
-}
-
-function initials(name: string): string {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase() ?? "")
-    .join("");
 }

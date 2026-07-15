@@ -1,4 +1,3 @@
-import type { Page } from "@playwright/test";
 import { expect, test } from "@playwright/test";
 
 const configuredBaseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:5174";
@@ -9,34 +8,25 @@ function appPath(path: string): string {
   return basePath === "/" ? path : `${basePath}${path.replace(/^\//, "")}`;
 }
 
-async function openMobileNavigation(page: Page): Promise<void> {
-  const toggle = page.locator(".site-nav__toggle");
-  if (await toggle.isVisible()) await toggle.click();
-  const group = page.locator(".site-nav__group");
-  if ((await group.getAttribute("open")) === null) await group.locator("summary").click();
-}
-
 test("renders chapter homepage and resource search", async ({ page }) => {
   await page.goto(appPath("/"));
-  await openMobileNavigation(page);
   await expect(page.getByRole("heading", { name: "Amharic DBpedia Chapter" })).toBeVisible();
   await expect(page.getByLabel("Resource title or IRI")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Latest news" })).toBeVisible();
   await expect(page.locator(".news-item")).toHaveCount(3);
-  await expect(page.locator(".site-nav__group > summary")).toContainText("Tools & publications");
+  await expect(page.getByRole("link", { name: "Resources", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "News", exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "Docs" })).toBeVisible();
 });
 
-test("renders the tools and publications destination from the primary navigation", async ({
-  page,
-}) => {
+test("renders the resources destination from the primary navigation", async ({ page }) => {
   await page.goto(appPath("/"));
-  await openMobileNavigation(page);
-  await page.getByRole("link", { name: "Tools & publications", exact: true }).click();
+  await page.getByRole("link", { name: "Resources", exact: true }).click();
 
   await expect(page).toHaveURL(new RegExp(`${appPath("/tools")}$`));
-  await expect(page.getByRole("heading", { name: "Tools & publications" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Publications & releases" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Resources" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Datasets and mappings" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Publication" })).toBeVisible();
 });
 
 test("embeds Tentris inside the SPARQL page", async ({ page }) => {
@@ -57,12 +47,12 @@ test("renders the non-technical about page", async ({ page }) => {
   await expect(page.getByText("Why Amharic needs its own chapter")).toBeVisible();
 });
 
-test("renders chapter statistics on the homepage", async ({ page }) => {
-  await page.goto(appPath("/#statistics"));
+test("renders chapter statistics on the about page", async ({ page }) => {
+  await page.goto(appPath("/about#statistics"));
 
   await expect(page.getByRole("heading", { name: "Chapter at a glance" })).toBeVisible();
   await expect(page.getByText("97")).toBeVisible();
-  await expect(page.locator(".metric--interactive")).toHaveCount(4);
+  await expect(page.locator(".about-statistics .metric")).toHaveCount(4);
 });
 
 test("renders a dedicated resource landing page", async ({ page }) => {

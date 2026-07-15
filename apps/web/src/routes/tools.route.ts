@@ -1,5 +1,3 @@
-import { resourceLinks } from "@amdb/content";
-import { AMHARIC_DATABUS_COLLECTION } from "@amdb/core";
 import type { AppLayout } from "../app/layout";
 import { appHref } from "../app/paths";
 import { clear, externalLink } from "../dom/html";
@@ -8,17 +6,19 @@ export function renderTools(layout: AppLayout): void {
   clear(layout.main);
 
   const section = document.createElement("section");
-  section.className = "page-section tools-page";
+  section.className = "page-section tools-page resources-page";
   const title = document.createElement("h1");
-  title.textContent = "Tools & publications";
+  title.textContent = "Resources";
   const intro = document.createElement("p");
   intro.className = "lead";
   intro.textContent =
-    "Query the graph, browse its resources, and find the published releases that make Amharic DBpedia reusable.";
+    "Use the live interfaces, published datasets, mappings, and research paper that make Amharic DBpedia reusable.";
 
   const tools = document.createElement("section");
   tools.className = "tools-page__section";
-  tools.append(sectionHeading("Tools", "Start with the live interfaces."));
+  tools.append(
+    sectionHeading("Explore the graph", "Start with the interfaces that let you use the data."),
+  );
   const toolGrid = document.createElement("div");
   toolGrid.className = "resource-grid tools-page__grid";
   toolGrid.append(
@@ -32,43 +32,30 @@ export function renderTools(layout: AppLayout): void {
       "Extraction Framework",
       "The upstream framework that turns Wikipedia dumps into RDF.",
       "https://github.com/dbpedia/extraction-framework",
-      "/assets/images/github-logo.png",
     ),
   );
   tools.append(toolGrid);
 
-  const publications = document.createElement("section");
-  publications.className = "tools-page__section";
-  publications.append(
+  const datasets = document.createElement("section");
+  datasets.className = "tools-page__section";
+  datasets.append(
     sectionHeading(
-      "Publications & releases",
-      "Research updates, mappings, and downloadable artifacts.",
+      "Datasets and mappings",
+      "Find the published graph and the mappings that shape it.",
     ),
   );
-  const publicationGrid = document.createElement("div");
-  publicationGrid.className = "resource-grid tools-page__grid";
-  for (const link of resourceLinks.filter((item) => item.title.en !== "Extraction Framework")) {
-    const card = document.createElement("article");
-    card.className = "resource-card";
-    if (link.image) {
-      const image = document.createElement("img");
-      image.src = appHref(link.image);
-      image.alt = "";
-      image.loading = "lazy";
-      card.append(image);
-    }
-    const cardTitle = document.createElement("h3");
-    cardTitle.append(externalLink(link.href, link.title.en));
-    const description = document.createElement("p");
-    description.textContent = link.description.en;
-    card.append(cardTitle, description);
-    publicationGrid.append(card);
-  }
-  publicationGrid.append(
+  const datasetGrid = document.createElement("div");
+  datasetGrid.className = "resource-grid tools-page__grid";
+  datasetGrid.append(
     externalCard(
-      "LREC 2026 paper",
-      "The published research release describing the Amharic DBpedia chapter.",
-      "https://lrec.elra.info/lrec2026-main-627",
+      "Databus collection",
+      "Download the Amharic DBpedia RDF releases and their published artifacts.",
+      "https://databus.dbpedia.org/purplebee/collections/am_chapter/",
+    ),
+    externalCard(
+      "Amharic mappings",
+      "Review and maintain the Amharic template-to-ontology mappings.",
+      "https://mappings.dbpedia.org/index.php/Mapping_am",
     ),
     externalCard(
       "DICE Research dataset",
@@ -76,12 +63,28 @@ export function renderTools(layout: AppLayout): void {
       "https://am.dbpedia.data.dice-research.org/ui",
     ),
   );
-  publications.append(
-    publicationGrid,
-    externalLink(AMHARIC_DATABUS_COLLECTION, "Open the Amharic Databus collection"),
-  );
+  datasets.append(datasetGrid);
 
-  section.append(title, intro, tools, publications);
+  const publication = document.createElement("section");
+  publication.className = "tools-page__section";
+  publication.append(
+    sectionHeading(
+      "Publication",
+      "Read the paper that documents the chapter and its extraction work.",
+    ),
+  );
+  const publicationGrid = document.createElement("div");
+  publicationGrid.className = "resource-grid tools-page__grid";
+  publicationGrid.append(
+    externalCard(
+      "The Amharic DBpedia Chapter",
+      "The LREC 2026 research paper describing the chapter, graph, and language-aware processing.",
+      "https://lrec.elra.info/lrec2026-main-627",
+    ),
+  );
+  publication.append(publicationGrid);
+
+  section.append(title, intro, tools, datasets, publication);
   layout.main.append(section);
 }
 
@@ -110,20 +113,9 @@ function internalCard(title: string, description: string, href: string): HTMLEle
   return card;
 }
 
-function externalCard(
-  title: string,
-  description: string,
-  href: string,
-  imagePath?: string,
-): HTMLElement {
+function externalCard(title: string, description: string, href: string): HTMLElement {
   const card = document.createElement("article");
   card.className = "resource-card resource-card--linked";
-  if (imagePath) {
-    const image = document.createElement("img");
-    image.src = appHref(imagePath);
-    image.alt = "";
-    card.append(image);
-  }
   const heading = document.createElement("h3");
   heading.append(externalLink(href, title));
   const body = document.createElement("p");

@@ -3,19 +3,22 @@ import { describe, expect, it } from "vitest";
 
 describe("web content", () => {
   it("keeps the primary navigation focused", () => {
-    expect(navigation).toHaveLength(6);
+    expect(navigation).toHaveLength(8);
     expect(navigation.map((item) => item.href)).toEqual([
       "/",
       "/about",
       "/tools",
+      "/sparql",
+      "/news",
       "/docs",
       "/team",
       "https://github.com/AmharicDBpedia",
     ]);
   });
 
-  it("combines tools and publications into one destination", () => {
+  it("labels the resource destination clearly", () => {
     expect(navigation.map((item) => item.href)).toContain("/tools");
+    expect(navigation.find((item) => item.href === "/tools")?.label.en).toBe("Resources");
   });
 
   it("exposes about as a primary navigation destination", () => {

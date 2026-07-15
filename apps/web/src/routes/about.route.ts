@@ -1,9 +1,12 @@
+import { chapterMetrics, researchHighlights } from "@amdb/content";
+import { pickLocalized } from "@amdb/core";
 import type { AppLayout } from "../app/layout";
 import { appHref } from "../app/paths";
-import { appendIconLabel, clear } from "../dom/html";
+import { clear } from "../dom/html";
 
 export function renderAbout(layout: AppLayout): void {
   clear(layout.main);
+  const language = layout.getLanguage();
 
   const section = document.createElement("section");
   section.className = "page-section about-page";
@@ -122,6 +125,49 @@ export function renderAbout(layout: AppLayout): void {
   }
   timeline.append(timelineTitle, timelineIntro, timelineList);
 
+  const statistics = document.createElement("section");
+  statistics.className = "home-statistics about-statistics";
+  statistics.id = "statistics";
+  const statisticsHeader = document.createElement("div");
+  statisticsHeader.className = "home-statistics__header";
+  const statisticsTitle = document.createElement("h2");
+  statisticsTitle.textContent = "Chapter at a glance";
+  const statisticsIntro = document.createElement("p");
+  statisticsIntro.textContent =
+    "A clear snapshot of the current release: coverage, mapped properties, and published graph facts.";
+  statisticsHeader.append(statisticsTitle, statisticsIntro);
+  const metrics = document.createElement("div");
+  metrics.className = "metric-grid";
+  for (const metric of chapterMetrics) {
+    const card = document.createElement("article");
+    card.className = `metric metric--${metric.tone ?? "primary"}`;
+    const value = document.createElement("strong");
+    value.textContent = metric.value;
+    const label = document.createElement("span");
+    label.textContent = pickLocalized(metric.label, language) ?? "";
+    const detail = document.createElement("p");
+    detail.textContent = pickLocalized(metric.detail, language) ?? "";
+    card.append(value, label, detail);
+    metrics.append(card);
+  }
+  statistics.append(statisticsHeader, metrics);
+
+  const research = document.createElement("section");
+  research.className = "insight-grid about-research";
+  const researchHeading = document.createElement("h2");
+  researchHeading.textContent = "What makes this chapter different";
+  research.append(researchHeading);
+  for (const highlight of researchHighlights) {
+    const card = document.createElement("article");
+    card.className = "insight-card";
+    const heading = document.createElement("h3");
+    heading.textContent = pickLocalized(highlight.title, language) ?? "";
+    const body = document.createElement("p");
+    body.textContent = pickLocalized(highlight.body, language) ?? "";
+    card.append(heading, body);
+    research.append(card);
+  }
+
   const uses = document.createElement("section");
   uses.className = "insight-grid";
   const usesTitle = document.createElement("h2");
@@ -151,11 +197,6 @@ export function renderAbout(layout: AppLayout): void {
     uses.append(card);
   }
 
-  const action = document.createElement("a");
-  action.className = "button-link button-link--primary";
-  action.href = appHref("/tools");
-  appendIconLabel(action, "arrow-right", "Explore tools and releases");
-
-  section.append(title, intro, overview, why, steps, timeline, uses, action);
+  section.append(title, intro, overview, why, steps, timeline, statistics, research, uses);
   layout.main.append(section);
 }

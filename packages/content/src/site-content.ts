@@ -22,8 +22,10 @@ export const navigation: readonly NavItem[] = [
   { href: "/about", label: { en: "About", am: "ስለ ፕሮጀክቱ", de: "Über" } },
   {
     href: "/tools",
-    label: { en: "Tools & publications", am: "Tools & publications", de: "Tools & Publikationen" },
+    label: { en: "Resources", am: "Resources", de: "Ressourcen" },
   },
+  { href: "/sparql", label: { en: "SPARQL", am: "SPARQL", de: "SPARQL" } },
+  { href: "/news", label: { en: "News", am: "News", de: "Neuigkeiten" } },
   { href: "/docs", label: { en: "Docs", am: "Docs", de: "Dokumentation" } },
   { href: "/team", label: { en: "Team", am: "ቡድን", de: "Team" } },
   {
@@ -118,18 +120,6 @@ export const researchHighlights: readonly ResearchHighlight[] = [
       en: "The paper extends DEF with Ethiopian date parsing, Ethiopian-Gregorian calendar conversion, and Arabic-Ge'ez numeral conversion.",
       am: "ጽሑፉ DEFን በኢትዮጵያ ቀን ትንተና፣ የኢትዮጵያ-ጎርጎርዮሳዊ ቀን መቀየሪያ፣ እና የአረብኛ-Ge'ez ቁጥር መቀየሪያ ያሰፋዋል።",
       de: "Das Paper erweitert DEF um äthiopische Datumsparser, Kalenderkonvertierung und Arabic-Ge'ez-Zahlenkonvertierung.",
-    },
-  },
-  {
-    title: {
-      en: "Translation-assisted mappings",
-      am: "በትርጉም የታገዘ mapping",
-      de: "Übersetzungsgestützte Mappings",
-    },
-    body: {
-      en: "Zero-shot NLLB-200 reached BLEU 45.31 on Amharic infobox property translation, useful as a draft generator but still requiring review.",
-      am: "Zero-shot NLLB-200 በአማርኛ infobox property ትርጉም BLEU 45.31 አግኝቷል፤ ለመነሻ ይጠቅማል ግን ሰው ማረጋገጥ ይፈልጋል።",
-      de: "Zero-shot NLLB-200 erreichte BLEU 45,31 und eignet sich als Entwurfshilfe, braucht aber Review.",
     },
   },
   {
@@ -228,7 +218,7 @@ export const newsItems: readonly NewsItem[] = [
     },
     category: { en: "Release", am: "ሪሊዝ", de: "Release" },
     publishedAt: "2025-08-20",
-    href: "/#statistics",
+    href: "/about#statistics",
     actionLabel: {
       en: "See chapter stats",
       am: "See chapter stats",
@@ -237,7 +227,7 @@ export const newsItems: readonly NewsItem[] = [
     links: [
       {
         label: { en: "Chapter stats", am: "Chapter stats", de: "Kapitelstatistik" },
-        href: "/#statistics",
+        href: "/about#statistics",
       },
       {
         label: { en: "Published datasets", am: "የታተሙ ዳታሴቶች", de: "Veroeffentlichte Datensaetze" },
@@ -393,7 +383,7 @@ export const teamMembers: readonly TeamMember[] = [
     status: "active",
     period: "2025–present",
     image: "/assets/images/andargachew-asfaw.png",
-    href: "https://github.com/contact-andy/GSoC-25_DBpedia_Amharic_Chapter",
+    href: "https://www.aau.edu.et/",
   },
   {
     name: "Hizkiel Mitiku Alemayehu",
@@ -402,7 +392,7 @@ export const teamMembers: readonly TeamMember[] = [
     status: "active",
     period: "2024–present",
     image: "/assets/images/hizkiel-mitiku.jpg",
-    href: "https://linkedin.com/in/hizkiel-mitiku-alemayehu-97306010b",
+    href: "https://www.uni-paderborn.de/en/",
   },
   {
     name: "Tilahun Abedissa Taffa",
@@ -411,7 +401,7 @@ export const teamMembers: readonly TeamMember[] = [
     status: "active",
     period: "2024–present",
     image: "/assets/images/tilahun-taffa.jpg",
-    href: "https://www.linkedin.com/in/tilahun-abedissa-47372a9a",
+    href: "https://www.uni-hamburg.de/en.html",
   },
   {
     name: "Meti Bayissa",
@@ -420,7 +410,7 @@ export const teamMembers: readonly TeamMember[] = [
     status: "previous",
     period: "GSoC 2024",
     image: "/assets/images/meti-bayissa.jpg",
-    href: "https://www.linkedin.com/in/metiadanebayissa/",
+    href: "https://www.aau.edu.et/",
   },
   {
     name: "Prof. Dr. Ricardo Usbeck",
@@ -429,7 +419,7 @@ export const teamMembers: readonly TeamMember[] = [
     status: "active",
     period: "2024–present",
     image: "/assets/images/ricardo-usbeck.jpg",
-    href: "https://www.linkedin.com/in/ricardo-usbeck/",
+    href: "https://www.leuphana.de/en/research.html",
   },
   {
     name: "Prof. Dr. Axel-Cyrille Ngonga Ngomo",
@@ -438,15 +428,6 @@ export const teamMembers: readonly TeamMember[] = [
     status: "active",
     period: "2024–present",
     image: "/assets/images/axel-ngonga.png",
-    href: "https://lamarr-institute.org/people/axel-ngonga-ngomo/",
-  },
-  {
-    name: "Dr. Hamada M. Zahera",
-    role: "Mentor",
-    affiliation: "Paderborn University",
-    status: "previous",
-    period: "2024–2025",
-    image: "/assets/images/hamada-zahera.png",
-    href: "https://pm.uni-paderborn.de/en/people/hamada-zahera",
+    href: "https://www.uni-paderborn.de/en/",
   },
 ];

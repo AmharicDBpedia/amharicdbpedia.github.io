@@ -23,7 +23,7 @@ export function createLayout(root: HTMLElement, initialLanguage: SupportedLangua
   footer.className = "site-footer";
   const footerInner = document.createElement("div");
   footerInner.className = "site-footer__inner";
-  footerInner.textContent = "Amharic DBpedia Chapter";
+  footerInner.textContent = `Amharic DBpedia Chapter · ${new Date().getFullYear()}`;
   footer.append(footerInner);
 
   function renderHeader(): void {

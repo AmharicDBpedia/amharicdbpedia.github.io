@@ -1,44 +1,10 @@
-import { chapterMetrics, newsItems, researchHighlights, resourceLinks } from "@amdb/content";
+import { newsItems, resourceLinks } from "@amdb/content";
 import { pickLocalized } from "@amdb/core";
 import type { AppLayout } from "../app/layout";
 import { appHref } from "../app/paths";
 import { renderNewsItem } from "../components/news-item";
-import { appendIconLabel, clear, externalLink, faIcon } from "../dom/html";
+import { clear, externalLink } from "../dom/html";
 import { renderResourceSearch } from "../features/search/resource-search";
-
-interface MetricInsight {
-  readonly title: string;
-  readonly body: string;
-  readonly sourceLabel: string;
-  readonly sourceHref: string;
-}
-
-const metricInsights: readonly MetricInsight[] = [
-  {
-    title: "Mapped templates",
-    body: "A mapped template connects an Amharic Wikipedia infobox to DBpedia's shared ontology, turning recurring fields into structured RDF.",
-    sourceLabel: "Open Amharic mappings",
-    sourceHref: "https://mappings.dbpedia.org/index.php/Mapping_am",
-  },
-  {
-    title: "Property coverage",
-    body: "Property coverage measures how many distinct infobox fields were matched to DBpedia ontology properties.",
-    sourceLabel: "Open ontology example",
-    sourceHref: "https://mappings.dbpedia.org/index.php/OntologyClass%3APerson",
-  },
-  {
-    title: "Property occurrences",
-    body: "Occurrences count real uses of mapped fields across Amharic Wikipedia pages, showing how much published article data is covered.",
-    sourceLabel: "Open Amharic mappings",
-    sourceHref: "https://mappings.dbpedia.org/index.php/Mapping_am",
-  },
-  {
-    title: "Unique triples",
-    body: "A triple is one structured fact: subject, predicate, and object. Unique triples are the deduplicated facts in the release.",
-    sourceLabel: "Open Databus collection",
-    sourceHref: "https://databus.dbpedia.org/purplebee/collections/am_chapter/",
-  },
-];
 
 export function renderHome(layout: AppLayout): void {
   clear(layout.main);
@@ -62,12 +28,12 @@ export function renderHome(layout: AppLayout): void {
   const sparqlLink = document.createElement("a");
   sparqlLink.className = "button-link button-link--primary";
   sparqlLink.href = appHref("/sparql");
-  appendIconLabel(sparqlLink, "code", "Open SPARQL");
-  const statsLink = document.createElement("a");
-  statsLink.className = "button-link";
-  statsLink.href = appHref("/#statistics");
-  appendIconLabel(statsLink, "chart-line", "See chapter stats");
-  heroActions.append(sparqlLink, statsLink);
+  sparqlLink.textContent = "Open SPARQL";
+  const resourcesLink = document.createElement("a");
+  resourcesLink.className = "button-link";
+  resourcesLink.href = appHref("/tools");
+  resourcesLink.textContent = "Browse resources";
+  heroActions.append(sparqlLink, resourcesLink);
   copy.append(eyebrow, title, body, renderResourceSearch(layout), heroActions);
 
   const visual = document.createElement("div");
@@ -98,7 +64,7 @@ export function renderHome(layout: AppLayout): void {
     graph.append(nodeElement);
   }
   const visualTitle = document.createElement("strong");
-  visualTitle.append(faIcon("database"), document.createTextNode("Amharic Dbpedia"));
+  visualTitle.textContent = "Amharic Dbpedia";
   const visualBody = document.createElement("p");
   visualBody.textContent =
     "Wikipedia dumps + mappings + Amharic-aware parsers -> RDF knowledge graph";
@@ -106,54 +72,48 @@ export function renderHome(layout: AppLayout): void {
 
   hero.append(copy, visual);
 
-  const statistics = document.createElement("section");
-  statistics.className = "home-statistics";
-  statistics.id = "statistics";
-  const statisticsHeader = document.createElement("div");
-  statisticsHeader.className = "home-statistics__header";
-  const statisticsTitle = document.createElement("h2");
-  statisticsTitle.textContent = "Chapter at a glance";
-  const statisticsIntro = document.createElement("p");
-  statisticsIntro.textContent =
-    "A compact view of the current Amharic DBpedia release. Each number points to a different layer of the graph.";
-  statisticsHeader.append(statisticsTitle, statisticsIntro);
-  const metrics = document.createElement("div");
-  metrics.className = "metric-grid";
-  for (const [index, metric] of chapterMetrics.entries()) {
-    const article = document.createElement("article");
-    article.className = `metric metric--${metric.tone ?? "primary"} metric--interactive`;
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "metric__button";
-    const value = document.createElement("strong");
-    value.textContent = metric.value;
-    const label = document.createElement("span");
-    label.textContent = pickLocalized(metric.label, language) ?? "";
-    const detail = document.createElement("p");
-    detail.textContent = pickLocalized(metric.detail, language) ?? "";
-    button.append(value, label, detail);
-    const insight = metricInsights[index];
-    if (insight) button.addEventListener("click", () => openMetricDialog(insight));
-    article.append(button);
-    metrics.append(article);
+  const quickStart = document.createElement("section");
+  quickStart.className = "home-quick-start";
+  const quickStartHeading = document.createElement("div");
+  quickStartHeading.className = "section-heading";
+  const quickStartTitle = document.createElement("h2");
+  quickStartTitle.textContent = "Start with a question";
+  const quickStartIntro = document.createElement("p");
+  quickStartIntro.textContent =
+    "Choose the shortest path to the part of Amharic DBpedia you want to explore.";
+  quickStartHeading.append(quickStartTitle, quickStartIntro);
+  const quickStartGrid = document.createElement("div");
+  quickStartGrid.className = "home-quick-start__grid";
+  for (const item of [
+    [
+      "Find an entity",
+      "Open an Amharic resource and inspect its facts and relationships.",
+      "/resource",
+    ],
+    [
+      "Query the graph",
+      "Run a bounded SPARQL query against the public knowledge graph.",
+      "/sparql",
+    ],
+    [
+      "Reuse the release",
+      "Find datasets, mappings, the DICE endpoint, and the research paper.",
+      "/tools",
+    ],
+  ] as const) {
+    const card = document.createElement("article");
+    card.className = "home-quick-start__card";
+    const heading = document.createElement("h3");
+    const link = document.createElement("a");
+    link.href = appHref(item[2]);
+    link.textContent = item[0];
+    heading.append(link);
+    const body = document.createElement("p");
+    body.textContent = item[1];
+    card.append(heading, body);
+    quickStartGrid.append(card);
   }
-  statistics.append(statisticsHeader, metrics);
-
-  const research = document.createElement("section");
-  research.className = "insight-grid";
-  const researchHeading = document.createElement("h2");
-  researchHeading.textContent = "What makes this chapter different";
-  research.append(researchHeading);
-  for (const highlight of researchHighlights) {
-    const article = document.createElement("article");
-    article.className = "insight-card";
-    const itemTitle = document.createElement("h3");
-    itemTitle.textContent = pickLocalized(highlight.title, language) ?? "";
-    const itemBody = document.createElement("p");
-    itemBody.textContent = pickLocalized(highlight.body, language) ?? "";
-    article.append(itemTitle, itemBody);
-    research.append(article);
-  }
+  quickStart.append(quickStartHeading, quickStartGrid);
 
   const news = document.createElement("section");
   news.className = "news-section";
@@ -170,7 +130,7 @@ export function renderHome(layout: AppLayout): void {
   const newsArchive = document.createElement("a");
   newsArchive.className = "button-link";
   newsArchive.href = appHref("/news");
-  appendIconLabel(newsArchive, "arrow-right", "View all news");
+  newsArchive.textContent = "View all news";
   newsHeader.append(newsCopy, newsArchive);
 
   const newsGrid = document.createElement("div");
@@ -203,35 +163,5 @@ export function renderHome(layout: AppLayout): void {
     resources.append(card);
   }
 
-  layout.main.append(hero, statistics, research, news, resources);
-}
-
-function openMetricDialog(insight: MetricInsight): void {
-  document.querySelector("dialog.metric-dialog")?.remove();
-  const dialog = document.createElement("dialog");
-  dialog.className = "metric-dialog";
-  dialog.ariaLabel = insight.title;
-  const title = document.createElement("h2");
-  title.textContent = insight.title;
-  const body = document.createElement("p");
-  body.textContent = insight.body;
-  const actions = document.createElement("div");
-  actions.className = "metric-dialog__actions";
-  const source = document.createElement("a");
-  source.className = "button-link button-link--primary";
-  source.href = insight.sourceHref;
-  source.target = "_blank";
-  source.rel = "noreferrer";
-  source.textContent = insight.sourceLabel;
-  const close = document.createElement("button");
-  close.type = "button";
-  appendIconLabel(close, "right-from-bracket", "Close");
-  close.addEventListener("click", () => dialog.close());
-  actions.append(source, close);
-  dialog.append(title, body, actions);
-  dialog.addEventListener("click", (event) => {
-    if (event.target === dialog) dialog.close();
-  });
-  document.body.append(dialog);
-  dialog.showModal();
+  layout.main.append(hero, quickStart, news, resources);
 }

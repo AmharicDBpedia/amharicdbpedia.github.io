@@ -114,9 +114,6 @@ export async function navigate(href: string, layout: AppLayout, replace = false)
     openMenu.ariaExpanded = "false";
     openMenu.ariaLabel = "Open navigation";
   }
-  document.querySelectorAll<HTMLDetailsElement>(".site-nav__group[open]").forEach((group) => {
-    group.open = false;
-  });
   const url = new URL(appHref(href), window.location.origin);
   if (replace) history.replaceState({}, "", url);
   else history.pushState({}, "", url);
