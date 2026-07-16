@@ -87,11 +87,15 @@ function renderHomeAmbient(): HTMLElement {
   const ambient = document.createElement("div");
   ambient.className = "home-ambient";
   ambient.setAttribute("aria-hidden", "true");
-  ambient.append(
-    document.createElement("span"),
-    document.createElement("span"),
-    document.createElement("span"),
-    document.createElement("span"),
-  );
+  for (let index = 1; index <= 5; index += 1) {
+    const line = document.createElement("span");
+    line.className = `home-flow-line home-flow-line--${index}`;
+    ambient.append(line);
+  }
+  for (let index = 1; index <= 3; index += 1) {
+    const node = document.createElement("span");
+    node.className = `home-flow-node home-flow-node--${index}`;
+    ambient.append(node);
+  }
   return ambient;
 }
