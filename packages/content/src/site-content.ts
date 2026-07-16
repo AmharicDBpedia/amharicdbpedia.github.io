@@ -19,29 +19,39 @@ export const languages = {
 
 export const navigation: readonly NavItem[] = [
   { href: "/", label: { en: "Home", am: "መነሻ", de: "Start" } },
-  { href: "/news", label: { en: "News", am: "ዜና", de: "Aktuelles" } },
-  { href: "/statistics", label: { en: "Statistics", am: "ስታቲስቲክስ", de: "Statistik" } },
-  { href: "/automation", label: { en: "Automation", am: "አውቶሜሽን", de: "Automatisierung" } },
-  { href: "/datasets", label: { en: "Datasets", am: "ዳታሴቶች", de: "Datensätze" } },
+  { href: "/news", label: { en: "News", am: "News", de: "Neuigkeiten" } },
+  { href: "/about", label: { en: "About", am: "ስለ ፕሮጀክቱ", de: "Über" } },
+  {
+    href: "/tools",
+    label: { en: "Resources", am: "Resources", de: "Ressourcen" },
+  },
   { href: "/sparql", label: { en: "SPARQL", am: "SPARQL", de: "SPARQL" } },
-  { href: "/resource/ደብረ_ብርሃን", label: { en: "Resource", am: "ምንጭ", de: "Ressource" } },
+  { href: "/docs", label: { en: "Docs", am: "Docs", de: "Dokumentation" } },
   { href: "/team", label: { en: "Team", am: "ቡድን", de: "Team" } },
-  { href: "/docs", label: { en: "Docs", am: "ሰነዶች", de: "Dokumente" } },
+  {
+    href: "https://github.com/AmharicDBpedia",
+    label: {
+      en: "Amharic DBpedia on GitHub",
+      am: "Amharic DBpedia on GitHub",
+      de: "Amharic DBpedia auf GitHub",
+    },
+    icon: "github",
+  },
 ];
 
 export const chapterMetrics: readonly ChapterMetric[] = [
   {
-    label: { en: "Mapped templates", am: "የተዛመዱ መለጠፊያዎች", de: "Gemappte Vorlagen" },
+    label: { en: "Mapped templates", am: "Mapped templates", de: "Gemappte Vorlagen" },
     value: "97",
     tone: "primary",
     detail: {
       en: "GSoC 2025 report: 100% template coverage after mapping cleanup.",
-      am: "የGSoC 2025 ሪፖርት፡ ከማጽዳት በኋላ 100% የመለጠፊያ ሽፋን።",
+      am: "GSoC 2025 report: 100% template coverage mapping cleanup.",
       de: "GSoC-2025-Bericht: 100% Vorlagenabdeckung nach Mapping-Bereinigung.",
     },
   },
   {
-    label: { en: "Property coverage", am: "የባህሪ ሽፋን", de: "Property-Abdeckung" },
+    label: { en: "Property coverage", am: "Property coverage", de: "Property-Abdeckung" },
     value: "77.29%",
     tone: "accent",
     detail: {
@@ -51,12 +61,12 @@ export const chapterMetrics: readonly ChapterMetric[] = [
     },
   },
   {
-    label: { en: "Property occurrences", am: "የባህሪ ክስተቶች", de: "Property-Vorkommen" },
+    label: { en: "Property occurrences", am: "Property occurrences", de: "Property-Vorkommen" },
     value: "99.15%",
     tone: "warm",
     detail: {
       en: "Coverage reported after switching statistics to infobox-properties.ttl.",
-      am: "ስታቲስቲክስ ወደ infobox-properties.ttl ከተቀየረ በኋላ የተመዘገበ ሽፋን።",
+      am: "Coverage reported after switching statistics to infobox-properties.ttl.",
       de: "Abdeckung nach Umstellung der Statistik auf infobox-properties.ttl.",
     },
   },
@@ -66,7 +76,7 @@ export const chapterMetrics: readonly ChapterMetric[] = [
     tone: "primary",
     detail: {
       en: "Research paper release count for the extracted Amharic DBpedia knowledge graph.",
-      am: "በምርምር ጽሑፉ የተመዘገበ የአማርኛ DBpedia የተወጣ የእውቀት ግራፍ መጠን።",
+      am: "Research paper release count for the extracted Amharic DBpedia knowledge graph.",
       de: "Im Forschungspapier berichtete Anzahl extrahierter Amharic-DBpedia-Tripel.",
     },
   },
@@ -108,20 +118,8 @@ export const researchHighlights: readonly ResearchHighlight[] = [
     },
     body: {
       en: "The paper extends DEF with Ethiopian date parsing, Ethiopian-Gregorian calendar conversion, and Arabic-Ge'ez numeral conversion.",
-      am: "ጽሑፉ DEFን በኢትዮጵያ ቀን 解析፣ የኢትዮጵያ-ጎርጎርዮሳዊ ቀን መቀየሪያ፣ እና የአረብኛ-Ge'ez ቁጥር መቀየሪያ ያሰፋዋል።",
+      am: "ጽሑፉ DEFን በኢትዮጵያ ቀን ትንተና፣ የኢትዮጵያ-ጎርጎርዮሳዊ ቀን መቀየሪያ፣ እና የአረብኛ-Ge'ez ቁጥር መቀየሪያ ያሰፋዋል።",
       de: "Das Paper erweitert DEF um äthiopische Datumsparser, Kalenderkonvertierung und Arabic-Ge'ez-Zahlenkonvertierung.",
-    },
-  },
-  {
-    title: {
-      en: "Translation-assisted mappings",
-      am: "በትርጉም የታገዘ mapping",
-      de: "Übersetzungsgestützte Mappings",
-    },
-    body: {
-      en: "Zero-shot NLLB-200 reached BLEU 45.31 on Amharic infobox property translation, useful as a draft generator but still requiring review.",
-      am: "Zero-shot NLLB-200 በአማርኛ infobox property ትርጉም BLEU 45.31 አግኝቷል፤ ለመነሻ ይጠቅማል ግን ሰው ማረጋገጥ ይፈልጋል።",
-      de: "Zero-shot NLLB-200 erreichte BLEU 45,31 und eignet sich als Entwurfshilfe, braucht aber Review.",
     },
   },
   {
@@ -138,7 +136,7 @@ export const newsItems: readonly NewsItem[] = [
   {
     title: {
       en: "A knowledge graph for Amharic presented at LREC 2026",
-      am: "የአማርኛ የእውቀት ግራፍ በLREC 2026 ቀርቧል",
+      am: "Amharic knowledge graph በLREC 2026 ቀርቧል",
       de: "Ein Wissensgraph fuer Amharisch auf der LREC 2026 vorgestellt",
     },
     summary: {
@@ -160,8 +158,8 @@ export const newsItems: readonly NewsItem[] = [
         href: "https://lrec.elra.info/lrec2026-main-627",
       },
       {
-        label: { en: "GitHub resources", am: "የGitHub ምንጮች", de: "GitHub-Ressourcen" },
-        href: "https://github.com/Amharic-DBpedia/",
+        label: { en: "GitHub resources", am: "GitHub resources", de: "GitHub-Ressourcen" },
+        href: "https://github.com/AmharicDBpedia",
       },
     ],
   },
@@ -173,14 +171,14 @@ export const newsItems: readonly NewsItem[] = [
     },
     summary: {
       en: "The project publishes the Amharic knowledge graph, extraction assets, chapter resources, public Databus artifacts, and a Tentris query endpoint for exploration.",
-      am: "ፕሮጀክቱ የአማርኛ የእውቀት ግራፍን፣ extraction assets፣ chapter resources፣ Databus artifacts እና Tentris query endpoint ያቀርባል።",
+      am: "ፕሮጀክቱ Amharic knowledge graph፣ extraction assets፣ chapter resources፣ Databus artifacts እና Tentris query endpoint ያቀርባል።",
       de: "Das Projekt veroeffentlicht den Amharic-Wissensgraphen, Extraktionsressourcen, Databus-Artefakte und einen Tentris-Abfrageendpunkt.",
     },
     category: { en: "Resources", am: "ምንጮች", de: "Ressourcen" },
     publishedAt: "2026-05-15",
     href: "/sparql",
     actionLabel: {
-      en: "Explore the graph",
+      en: "Tools",
       am: "ግራፉን ይመልከቱ",
       de: "Graph erkunden",
     },
@@ -191,7 +189,7 @@ export const newsItems: readonly NewsItem[] = [
           am: "Amharic DBpedia GitHub",
           de: "Amharic-DBpedia-GitHub",
         },
-        href: "https://github.com/Amharic-DBpedia/",
+        href: "https://github.com/AmharicDBpedia",
       },
       {
         label: {
@@ -220,20 +218,20 @@ export const newsItems: readonly NewsItem[] = [
     },
     category: { en: "Release", am: "ሪሊዝ", de: "Release" },
     publishedAt: "2025-08-20",
-    href: "/statistics",
+    href: "/about#statistics",
     actionLabel: {
-      en: "View statistics",
-      am: "ስታቲስቲክስ ይመልከቱ",
-      de: "Statistik ansehen",
+      en: "See chapter stats",
+      am: "See chapter stats",
+      de: "Kapitelstatistik ansehen",
     },
     links: [
       {
-        label: { en: "Statistics dashboard", am: "የስታቲስቲክስ ገጽ", de: "Statistik-Dashboard" },
-        href: "/statistics",
+        label: { en: "Chapter stats", am: "Chapter stats", de: "Kapitelstatistik" },
+        href: "/about#statistics",
       },
       {
         label: { en: "Published datasets", am: "የታተሙ ዳታሴቶች", de: "Veroeffentlichte Datensaetze" },
-        href: "/datasets",
+        href: "/tools",
       },
     ],
   },
@@ -355,74 +353,82 @@ export const queryExamples: readonly QueryExample[] = [
 
 export const contributors: readonly Contributor[] = [
   {
+    name: "Natnael Yohanes",
+    year: "GSoC 2026",
+    role: "GSoC contributor",
+    href: "https://nama21yo.github.io/natnael-work/blog/gsoc/2026/",
+    image: "/assets/images/natnael-yohanes.webp",
+  },
+  {
     name: "Andargachew Asfaw",
     year: "GSoC 2025",
-    role: { en: "Contributor", am: "አስተዋጽዖ አበርካች", de: "Mitwirkender" },
+    role: "GSoC contributor",
     href: "https://github.com/contact-andy/GSoC-25_DBpedia_Amharic_Chapter",
+    image: "/assets/images/andargachew-asfaw.png",
   },
   {
     name: "Meti Bayissa",
     year: "GSoC 2024",
-    role: { en: "Contributor", am: "አስተዋጽዖ አበርካች", de: "Mitwirkende" },
+    role: "GSoC contributor",
     href: "https://github.com/Meti-Adane/GSOC-24_DBpedia_Amharic_Chapter",
+    image: "/assets/images/meti-bayissa.jpg",
   },
 ];
 
 export const teamMembers: readonly TeamMember[] = [
   {
-    name: "Prof. Dr. Ricardo Usbeck",
-    role: { en: "Mentor", am: "መሪ አማካሪ", de: "Mentor" },
-    affiliation: "Leuphana University of Lueneburg",
-    href: "https://www.linkedin.com/in/ricardo-usbeck/",
-  },
-  {
-    name: "Meti Bayissa",
-    role: {
-      en: "Mentor and GSoC 2024 contributor",
-      am: "መሪ አማካሪ እና GSoC 2024 አስተዋጽዖ አበርካች",
-      de: "Mentorin und GSoC-2024-Mitwirkende",
-    },
+    name: "Andargachew Asfaw",
+    role: "Mentor and GSoC contributor",
     affiliation: "Addis Ababa University",
-    href: "https://www.linkedin.com/in/metiadanebayissa/",
+    status: "active",
+    period: "2025–present",
+    image: "/assets/images/andargachew-asfaw.png",
+    href: "https://contact-andy.github.io/",
+    profileLabel: "Profile",
   },
   {
     name: "Hizkiel Mitiku Alemayehu",
-    role: {
-      en: "Mentor and paper author",
-      am: "መሪ አማካሪ እና የጽሑፍ ደራሲ",
-      de: "Mentor und Paper-Autor",
-    },
+    role: "Mentor",
     affiliation: "Paderborn University",
-    href: "https://linkedin.com/in/hizkiel-mitiku-alemayehu-97306010b",
+    status: "active",
+    period: "2024–present",
+    image: "/assets/images/hizkiel-mitiku.jpg",
+    href: "https://dice-research.org/HizkielMitikuAlemayehu/",
   },
   {
     name: "Tilahun Abedissa Taffa",
-    role: {
-      en: "Mentor and paper author",
-      am: "መሪ አማካሪ እና የጽሑፍ ደራሲ",
-      de: "Mentor und Paper-Autor",
-    },
+    role: "Mentor",
     affiliation: "University of Hamburg / Leuphana University",
-    href: "https://www.linkedin.com/in/tilahun-abedissa-47372a9a",
+    status: "active",
+    period: "2024–present",
+    image: "/assets/images/tilahun-taffa.jpg",
+    href: "https://www.leuphana.de/en/institutes/iis/persons/tilahun-taffa.html",
   },
   {
-    name: "Andargachew Asfaw",
-    role: {
-      en: "GSoC 2025 contributor and paper author",
-      am: "GSoC 2025 አስተዋጽዖ አበርካች እና የጽሑፍ ደራሲ",
-      de: "GSoC-2025-Mitwirkender und Paper-Autor",
-    },
+    name: "Meti Bayissa",
+    role: "GSoC contributor and mentor",
     affiliation: "Addis Ababa University",
-    href: "https://github.com/contact-andy/GSoC-25_DBpedia_Amharic_Chapter",
+    status: "previous",
+    period: "GSoC 2024",
+    image: "/assets/images/meti-bayissa.jpg",
+    href: "https://www.linkedin.com/in/metiadanebayissa/",
   },
   {
-    name: "Hamada M. Zahera",
-    role: { en: "Paper author", am: "የጽሑፍ ደራሲ", de: "Paper-Autor" },
-    affiliation: "Paderborn University",
+    name: "Prof. Dr. Ricardo Usbeck",
+    role: "Mentor",
+    affiliation: "Leuphana University of Lueneburg",
+    status: "active",
+    period: "2024–present",
+    image: "/assets/images/ricardo-usbeck.jpg",
+    href: "https://www.leuphana.de/en/institutes/iis/persons/ricardo-usbeck.html",
   },
   {
-    name: "Axel-Cyrille Ngonga Ngomo",
-    role: { en: "Paper author", am: "የጽሑፍ ደራሲ", de: "Paper-Autor" },
+    name: "Prof. Dr. Axel-Cyrille Ngonga Ngomo",
+    role: "Mentor",
     affiliation: "Paderborn University",
+    status: "active",
+    period: "2024–present",
+    image: "/assets/images/axel-ngonga.png",
+    href: "https://www.uni-paderborn.de/en/person/65716",
   },
 ];

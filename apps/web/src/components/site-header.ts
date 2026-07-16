@@ -1,12 +1,10 @@
-import type { LocalizedText } from "@amdb/content";
-import { languages, type NavItem } from "@amdb/content";
-import type { SupportedLanguage } from "@amdb/core";
+import type { LocalizedText, NavItem } from "@amdb/content";
 import { appHref } from "../app/paths";
 
+type HeaderNavItem = NavItem & { readonly icon?: "github" };
+
 interface SiteHeaderProps {
-  readonly navigation: readonly NavItem[];
-  readonly language: SupportedLanguage;
-  readonly onLanguageChange: (language: SupportedLanguage) => void;
+  readonly navigation: readonly HeaderNavItem[];
   readonly localize: (value: LocalizedText) => string;
 }
 
@@ -33,28 +31,41 @@ export function renderSiteHeader(props: SiteHeaderProps): HTMLElement {
   nav.className = "site-nav";
   nav.setAttribute("aria-label", "Primary");
 
+  const menuToggle = document.createElement("button");
+  menuToggle.className = "site-nav__toggle";
+  menuToggle.type = "button";
+  menuToggle.ariaLabel = "Open navigation";
+  menuToggle.ariaExpanded = "false";
+  menuToggle.innerHTML = "<span></span><span></span><span></span>";
+  menuToggle.addEventListener("click", () => {
+    const open = header.classList.toggle("site-header--menu-open");
+    menuToggle.ariaExpanded = String(open);
+    menuToggle.ariaLabel = open ? "Close navigation" : "Open navigation";
+  });
+
   for (const item of props.navigation) {
     const link = document.createElement("a");
     link.href = appHref(item.href);
-    link.textContent = props.localize(item.label);
+    if (item.href.startsWith("https://")) {
+      link.target = "_blank";
+      link.rel = "noreferrer";
+    }
+    if (item.icon === "github") {
+      link.className = "site-nav__icon-link";
+      link.ariaLabel = props.localize(item.label);
+      const icon = document.createElement("img");
+      icon.src = appHref("/assets/images/github-logo.png");
+      icon.alt = "";
+      icon.width = 22;
+      icon.height = 22;
+      link.append(icon);
+    } else {
+      link.textContent = props.localize(item.label);
+    }
     nav.append(link);
   }
 
-  const language = document.createElement("select");
-  language.className = "language-select";
-  language.ariaLabel = "Language";
-  for (const [code, label] of Object.entries(languages)) {
-    const option = document.createElement("option");
-    option.value = code;
-    option.textContent = label;
-    option.selected = code === props.language;
-    language.append(option);
-  }
-  language.addEventListener("change", () => {
-    props.onLanguageChange(language.value as SupportedLanguage);
-  });
-
-  inner.append(brand, nav, language);
+  inner.append(brand, nav, menuToggle);
   header.append(inner);
   return header;
 }

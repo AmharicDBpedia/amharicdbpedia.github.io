@@ -1,5 +1,6 @@
 import type { AppLayout } from "../../app/layout";
 import { navigate } from "../../app/router";
+import { appendIconLabel } from "../../dom/html";
 
 export function renderResourceSearch(layout: AppLayout): HTMLElement {
   const form = document.createElement("form");
@@ -14,18 +15,21 @@ export function renderResourceSearch(layout: AppLayout): HTMLElement {
   input.id = "resource-title";
   input.name = "resource";
   input.type = "search";
-  input.placeholder = "ወርቁ_ማሞ";
+  input.placeholder = "ዳኛቸው ወርቁ";
   input.autocomplete = "off";
 
   const button = document.createElement("button");
   button.type = "submit";
-  button.textContent = "Open";
+  appendIconLabel(button, "arrow-right", "Open");
 
   form.append(label, input, button);
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const value = input.value.trim();
-    if (!value) return;
+    if (!value) {
+      void navigate("/resource", layout);
+      return;
+    }
     void navigate(`/resource/${encodeURIComponent(value)}`, layout);
   });
 

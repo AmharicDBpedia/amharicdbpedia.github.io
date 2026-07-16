@@ -19,6 +19,15 @@ LIMIT ${limit}
 `.trim();
 }
 
+export function predicateUsageQuery(iri: Iri, limit = 12): string {
+  return `
+SELECT DISTINCT ?subject ?object WHERE {
+  ?subject <${iri}> ?object .
+}
+LIMIT ${limit}
+`.trim();
+}
+
 export function resourceLabelsQuery(search: string, limit = 10): string {
   const escaped = search.replaceAll("\\", "\\\\").replaceAll('"', '\\"');
   return `

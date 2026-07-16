@@ -50,6 +50,11 @@ export function compactIri(iri: string): string {
     ["http://www.w3.org/1999/02/22-rdf-syntax-ns#", "rdf:"],
     ["http://www.w3.org/2000/01/rdf-schema#", "rdfs:"],
     ["http://xmlns.com/foaf/0.1/", "foaf:"],
+    ["http://purl.org/dc/terms/", "dct:"],
+    ["http://purl.org/dc/elements/1.1/", "dc:"],
+    ["http://www.w3.org/2002/07/owl#", "owl:"],
+    ["http://www.w3.org/ns/prov#", "prov:"],
+    ["http://www.w3.org/2004/02/skos/core#", "skos:"],
   ];
 
   for (const [prefix, label] of prefixes) {

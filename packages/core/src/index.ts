@@ -1,6 +1,7 @@
 export * from "./graph/model";
 export * from "./graph/selectors";
 export * from "./rdf/parser";
+export * from "./rdf/predicate";
 export * from "./rdf/terms";
 export * from "./sparql/queries";
 export * from "./sparql/result";

@@ -1,10 +1,15 @@
 import { compactIri, type Iri, resourceToEgoGraph } from "@amdb/core";
 import type { AppLayout } from "../app/layout";
+import { appHref } from "../app/paths";
 import { renderPropertyTable } from "../components/property-table";
-import { clear, externalLink } from "../dom/html";
+import { appendIconLabel, clear, externalLink } from "../dom/html";
 import { renderEgoGraph } from "../features/graph/ego-graph";
 import { renderResourceSearch } from "../features/search/resource-search";
-import { loadRawResource, loadResourceSummary } from "../services/resource.service";
+import {
+  loadRawResource,
+  loadResourceSummary,
+  type RawResourceFormat,
+} from "../services/resource.service";
 
 let activeController: AbortController | undefined;
 
@@ -54,19 +59,54 @@ export async function renderResource(layout: AppLayout, title: string): Promise<
       header.append(description);
     }
 
-    const rawActions = document.createElement("div");
+    const rawActions = document.createElement("table");
     rawActions.className = "raw-actions";
-    for (const [format, label] of [
-      ["turtle", "Turtle"],
-      ["jsonld", "JSON-LD"],
+    const caption = document.createElement("caption");
+    caption.className = "visually-hidden";
+    caption.textContent = "RDF representations";
+    const head = document.createElement("thead");
+    head.className = "visually-hidden";
+    const headRow = document.createElement("tr");
+    for (const heading of ["Format", "Preview", "Download"]) {
+      const cell = document.createElement("th");
+      cell.scope = "col";
+      cell.textContent = heading;
+      headRow.append(cell);
+    }
+    head.append(headRow);
+    const body = document.createElement("tbody");
+    rawActions.append(caption, head, body);
+    for (const format of [
+      ["turtle", "Turtle (.ttl)"],
+      ["jsonld", "JSON-LD (.jsonld)"],
+      ["ntriples", "N-Triples (.nt)"],
     ] as const) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.textContent = label;
-      button.addEventListener("click", () => {
-        void showRaw(section, resource.iri, format);
+      const row = document.createElement("tr");
+      const name = document.createElement("th");
+      name.scope = "row";
+      name.textContent = format[1];
+      const preview = document.createElement("button");
+      preview.type = "button";
+      appendIconLabel(preview, "eye", "Preview");
+      preview.addEventListener("click", () => {
+        const previewUrl = appHref(
+          `/resource-preview?iri=${encodeURIComponent(resource.iri)}&format=${format[0]}`,
+        );
+        window.open(previewUrl, "_blank", "noopener,noreferrer");
       });
-      rawActions.append(button);
+      const download = document.createElement("button");
+      download.type = "button";
+      download.className = "button-link button-link--primary";
+      appendIconLabel(download, "download", "Download");
+      download.addEventListener("click", () => {
+        void downloadRaw(resource.iri, format[0]);
+      });
+      const previewCell = document.createElement("td");
+      previewCell.append(preview);
+      const downloadCell = document.createElement("td");
+      downloadCell.append(download);
+      row.append(name, previewCell, downloadCell);
+      body.append(row);
     }
     header.append(rawActions);
 
@@ -123,36 +163,35 @@ function renderNoFacts(iri: string): HTMLElement {
   return panel;
 }
 
-async function showRaw(section: HTMLElement, iri: Iri, format: "turtle" | "jsonld"): Promise<void> {
-  const existing = section.querySelector(".raw-panel");
-  existing?.remove();
-
-  const panel = document.createElement("section");
-  panel.className = "raw-panel";
-  const title = document.createElement("h2");
-  title.textContent = `Raw ${format === "turtle" ? "Turtle" : "JSON-LD"}`;
-  const pre = document.createElement("pre");
-  pre.textContent = "Loading raw RDF...";
-  panel.append(title, pre);
-  section.prepend(panel);
-
+async function downloadRaw(iri: Iri, format: RawResourceFormat): Promise<void> {
   try {
     const raw = await loadRawResource(iri, format);
-    pre.textContent =
-      raw.trim().length > 0
-        ? format === "jsonld"
-          ? prettyJson(raw)
-          : raw
-        : `No ${format === "turtle" ? "Turtle" : "JSON-LD"} returned for ${iri}`;
+    const blob = new Blob([raw], { type: formatMime(format) });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${resourceFileName(iri)}.${formatExtension(format)}`;
+    link.click();
+    URL.revokeObjectURL(url);
   } catch (error) {
-    pre.textContent = error instanceof Error ? error.message : "Failed to load raw RDF";
+    const message = error instanceof Error ? error.message : "Failed to download RDF";
+    window.alert(message);
   }
 }
 
-function prettyJson(raw: string): string {
-  try {
-    return JSON.stringify(JSON.parse(raw), null, 2);
-  } catch {
-    return raw;
-  }
+function formatExtension(format: RawResourceFormat): string {
+  return { turtle: "ttl", jsonld: "jsonld", ntriples: "nt" }[format];
+}
+
+function formatMime(format: RawResourceFormat): string {
+  return {
+    turtle: "text/turtle",
+    jsonld: "application/ld+json",
+    ntriples: "application/n-triples",
+  }[format];
+}
+
+function resourceFileName(iri: Iri): string {
+  const lastPart = iri.split("/").pop() ?? "resource";
+  return decodeURIComponent(lastPart).replace(/[^\p{L}\p{N}._-]+/gu, "_");
 }

@@ -5,6 +5,7 @@ export type LocalizedText = Readonly<Record<SupportedLanguage, string>>;
 export interface NavItem {
   readonly label: LocalizedText;
   readonly href: string;
+  readonly icon?: "github";
 }
 
 export interface ResourceLink {
@@ -30,15 +31,20 @@ export interface QueryExample {
 export interface Contributor {
   readonly name: string;
   readonly year: string;
-  readonly role: LocalizedText;
+  readonly role: string;
   readonly href: string;
+  readonly image?: string;
 }
 
 export interface TeamMember {
   readonly name: string;
-  readonly role: LocalizedText;
+  readonly role: string;
   readonly affiliation: string;
+  readonly status: "active" | "previous";
+  readonly period: string;
+  readonly image?: string;
   readonly href?: string;
+  readonly profileLabel?: string;
 }
 
 export interface ResearchHighlight {

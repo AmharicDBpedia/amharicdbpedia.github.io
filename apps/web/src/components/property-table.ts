@@ -1,5 +1,6 @@
 import type { RdfTerm, ResourceFact } from "@amdb/core";
 import { localName } from "@amdb/core";
+import { appHref } from "../app/paths";
 import { externalLink } from "../dom/html";
 
 export function renderPropertyTable(facts: readonly ResourceFact[]): HTMLTableElement {
@@ -21,10 +22,13 @@ export function renderPropertyTable(facts: readonly ResourceFact[]): HTMLTableEl
     const row = document.createElement("tr");
     const property = document.createElement("th");
     property.scope = "row";
-    property.append(externalLink(fact.predicate, fact.predicateLabel));
+    const propertyLink = document.createElement("a");
+    propertyLink.href = appHref(`/property/${encodeURIComponent(fact.predicate)}`);
+    propertyLink.textContent = fact.predicateLabel;
+    property.append(propertyLink);
 
     const value = document.createElement("td");
-    value.append(renderTerm(fact.object));
+    value.append(renderRdfTerm(fact.object));
 
     row.append(property, value);
     tbody.append(row);
@@ -34,7 +38,7 @@ export function renderPropertyTable(facts: readonly ResourceFact[]): HTMLTableEl
   return table;
 }
 
-function renderTerm(term: RdfTerm): Node {
+export function renderRdfTerm(term: RdfTerm): Node {
   if (term.termType === "NamedNode") {
     const isImage = /\.(jpg|jpeg|png|gif|svg|webp)(\?.*)?$/i.test(term.value);
     if (!isImage) return externalLink(term.value, localName(term.value));
