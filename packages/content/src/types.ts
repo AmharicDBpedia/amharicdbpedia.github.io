@@ -44,6 +44,7 @@ export interface TeamMember {
   readonly period: string;
   readonly image?: string;
   readonly href?: string;
+  readonly profileLabel?: string;
 }
 
 export interface ResearchHighlight {

@@ -1,17 +1,15 @@
-import { newsItems, resourceLinks } from "@amdb/content";
-import { pickLocalized } from "@amdb/core";
 import type { AppLayout } from "../app/layout";
 import { appHref } from "../app/paths";
-import { renderNewsItem } from "../components/news-item";
-import { clear, externalLink } from "../dom/html";
+import { clear } from "../dom/html";
 import { renderResourceSearch } from "../features/search/resource-search";
 
 export function renderHome(layout: AppLayout): void {
   clear(layout.main);
-  const language = layout.getLanguage();
+  const page = document.createElement("div");
+  page.className = "home-page";
 
   const hero = document.createElement("section");
-  hero.className = "hero";
+  hero.className = "hero home-hero";
 
   const copy = document.createElement("div");
   copy.className = "hero__copy";
@@ -36,41 +34,7 @@ export function renderHome(layout: AppLayout): void {
   heroActions.append(sparqlLink, resourcesLink);
   copy.append(eyebrow, title, body, renderResourceSearch(layout), heroActions);
 
-  const visual = document.createElement("div");
-  visual.className = "hero__visual hero__visual--graph";
-  const graph = document.createElement("div");
-  graph.className = "graph-map";
-  for (const edge of [
-    "graph-map__edge--one",
-    "graph-map__edge--two",
-    "graph-map__edge--three",
-    "graph-map__edge--four",
-  ]) {
-    const edgeElement = document.createElement("span");
-    edgeElement.className = `graph-map__edge ${edge}`;
-    graph.append(edgeElement);
-  }
-  for (const [index, node] of [
-    "Amharic",
-    "RDF",
-    "Ethiopia",
-    "DBpedia",
-    "Wiki",
-    "SPARQL",
-  ].entries()) {
-    const nodeElement = document.createElement("span");
-    nodeElement.className = `graph-map__node graph-map__node--${index + 1}`;
-    nodeElement.textContent = node;
-    graph.append(nodeElement);
-  }
-  const visualTitle = document.createElement("strong");
-  visualTitle.textContent = "Amharic Dbpedia";
-  const visualBody = document.createElement("p");
-  visualBody.textContent =
-    "Wikipedia dumps + mappings + Amharic-aware parsers -> RDF knowledge graph";
-  visual.append(graph, visualTitle, visualBody);
-
-  hero.append(copy, visual);
+  hero.append(copy);
 
   const quickStart = document.createElement("section");
   quickStart.className = "home-quick-start";
@@ -115,53 +79,39 @@ export function renderHome(layout: AppLayout): void {
   }
   quickStart.append(quickStartHeading, quickStartGrid);
 
-  const news = document.createElement("section");
-  news.className = "news-section";
-  news.id = "news";
-  const newsHeader = document.createElement("div");
-  newsHeader.className = "section-heading";
-  const newsCopy = document.createElement("div");
-  const newsEyebrow = document.createElement("p");
-  newsEyebrow.className = "eyebrow";
-  newsEyebrow.textContent = "Chapter updates";
-  const newsHeading = document.createElement("h2");
-  newsHeading.textContent = "Latest news";
-  newsCopy.append(newsEyebrow, newsHeading);
-  const newsArchive = document.createElement("a");
-  newsArchive.className = "button-link";
-  newsArchive.href = appHref("/news");
-  newsArchive.textContent = "View all news";
-  newsHeader.append(newsCopy, newsArchive);
+  page.append(renderHomeGraphBackground(), hero, quickStart);
+  layout.main.append(page);
+}
 
-  const newsGrid = document.createElement("div");
-  newsGrid.className = "news-grid";
-  for (const item of newsItems.slice(0, 3)) {
-    newsGrid.append(renderNewsItem(item, language));
+function renderHomeGraphBackground(): HTMLElement {
+  const background = document.createElement("div");
+  background.className = "home-graph-background";
+  background.setAttribute("aria-hidden", "true");
+  const graph = document.createElement("div");
+  graph.className = "graph-map";
+  for (const edge of [
+    "graph-map__edge--one",
+    "graph-map__edge--two",
+    "graph-map__edge--three",
+    "graph-map__edge--four",
+  ]) {
+    const edgeElement = document.createElement("span");
+    edgeElement.className = `graph-map__edge ${edge}`;
+    graph.append(edgeElement);
   }
-  news.append(newsHeader, newsGrid);
-
-  const resources = document.createElement("section");
-  resources.className = "resource-grid";
-  const heading = document.createElement("h2");
-  heading.textContent = "DBpedia chapter entry points";
-  resources.append(heading);
-  for (const link of resourceLinks) {
-    const card = document.createElement("article");
-    card.className = "resource-card";
-    if (link.image) {
-      const image = document.createElement("img");
-      image.src = appHref(link.image);
-      image.alt = "";
-      image.loading = "lazy";
-      card.append(image);
-    }
-    const cardTitle = document.createElement("h3");
-    cardTitle.append(externalLink(link.href, pickLocalized(link.title, language) ?? ""));
-    const description = document.createElement("p");
-    description.textContent = pickLocalized(link.description, language) ?? "";
-    card.append(cardTitle, description);
-    resources.append(card);
+  for (const [index, node] of [
+    "Amharic",
+    "RDF",
+    "Ethiopia",
+    "DBpedia",
+    "Wiki",
+    "SPARQL",
+  ].entries()) {
+    const nodeElement = document.createElement("span");
+    nodeElement.className = `graph-map__node graph-map__node--${index + 1}`;
+    nodeElement.textContent = node;
+    graph.append(nodeElement);
   }
-
-  layout.main.append(hero, quickStart, news, resources);
+  background.append(graph);
+  return background;
 }

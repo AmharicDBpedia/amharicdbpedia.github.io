@@ -19,8 +19,8 @@ test("renders chapter homepage and resource search", async ({ page }) => {
   await openMobileNavigation(page);
   await expect(page.getByRole("heading", { name: "Amharic DBpedia Chapter" })).toBeVisible();
   await expect(page.getByLabel("Resource title or IRI")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Latest news" })).toBeVisible();
-  await expect(page.locator(".news-item")).toHaveCount(3);
+  await expect(page.getByRole("heading", { name: "Start with a question" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Find an entity" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Resources", exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "News", exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "Docs" })).toBeVisible();
@@ -33,7 +33,7 @@ test("renders the resources destination from the primary navigation", async ({ p
 
   await expect(page).toHaveURL(new RegExp(`${appPath("/tools")}$`));
   await expect(page.getByRole("heading", { name: "Resources" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Datasets and mappings" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Datasets" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Publication" })).toBeVisible();
 });
 
@@ -61,6 +61,8 @@ test("renders chapter statistics on the about page", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Chapter at a glance" })).toBeVisible();
   await expect(page.getByText("97")).toBeVisible();
   await expect(page.locator(".about-statistics .metric")).toHaveCount(4);
+  await page.locator(".about-statistics .metric__button").first().click();
+  await expect(page.getByRole("dialog", { name: "Mapped templates" })).toBeVisible();
 });
 
 test("renders a dedicated resource landing page", async ({ page }) => {

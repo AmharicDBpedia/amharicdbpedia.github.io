@@ -178,7 +178,7 @@ export const newsItems: readonly NewsItem[] = [
     publishedAt: "2026-05-15",
     href: "/sparql",
     actionLabel: {
-      en: "Explore the graph",
+      en: "Tools",
       am: "ግራፉን ይመልከቱ",
       de: "Graph erkunden",
     },
@@ -383,7 +383,8 @@ export const teamMembers: readonly TeamMember[] = [
     status: "active",
     period: "2025–present",
     image: "/assets/images/andargachew-asfaw.png",
-    href: "https://www.aau.edu.et/",
+    href: "https://contact-andy.github.io/",
+    profileLabel: "Personal profile",
   },
   {
     name: "Hizkiel Mitiku Alemayehu",

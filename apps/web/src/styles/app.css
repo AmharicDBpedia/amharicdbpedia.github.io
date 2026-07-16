@@ -149,6 +149,32 @@ main:focus {
   padding-bottom: var(--space-6);
 }
 
+.home-page {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.home-hero {
+  position: relative;
+  z-index: 1;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: min(760px, calc(100vh - 120px));
+  max-width: 900px;
+  padding: var(--space-8) 0 var(--space-10);
+}
+
+.home-graph-background {
+  position: absolute;
+  z-index: -1;
+  top: 3rem;
+  right: -12rem;
+  width: min(760px, 72vw);
+  opacity: 0.28;
+  pointer-events: none;
+  transform: rotate(-7deg);
+}
+
 .hero__copy {
   display: grid;
   gap: var(--space-4);
@@ -568,7 +594,7 @@ h3 {
 
 .docs-guide__steps {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--space-3);
   margin-top: var(--space-5);
 }
@@ -577,8 +603,13 @@ h3 {
   display: grid;
   align-content: start;
   gap: var(--space-2);
+  min-height: 220px;
+  border: 1px solid var(--color-border);
   border-top: 2px solid var(--color-accent);
-  padding-top: var(--space-3);
+  border-radius: var(--radius);
+  background: var(--color-bg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-soft);
 }
 
 .docs-guide__number {
@@ -591,6 +622,13 @@ h3 {
 .docs-guide__step h3,
 .docs-guide__step p {
   margin-bottom: 0;
+}
+
+.docs-guide__step a {
+  align-self: end;
+  color: var(--color-primary);
+  font-size: 0.9rem;
+  font-weight: 800;
 }
 
 .docs-examples {
@@ -818,6 +856,12 @@ h3 {
 
 .resource-grid > h2 {
   grid-column: 1 / -1;
+}
+
+.resource-card h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 .metric,
@@ -2144,5 +2188,57 @@ h3 {
   .site-nav__icon-link {
     justify-self: start;
     width: 38px;
+  }
+}
+
+.home-graph-background .graph-map {
+  min-height: 440px;
+  border: 0;
+  background: transparent;
+  filter: blur(0.15px);
+}
+
+.home-graph-background .graph-map__node {
+  animation: graph-node-breathe 5s ease-in-out infinite;
+}
+
+.home-graph-background .graph-map__node--2,
+.home-graph-background .graph-map__node--5 {
+  animation-delay: -1.8s;
+}
+
+.home-graph-background .graph-map__node--3,
+.home-graph-background .graph-map__node--6 {
+  animation-delay: -3.2s;
+}
+
+.home-graph-background .graph-map__edge {
+  animation: graph-edge-pulse 4.5s ease-in-out infinite;
+}
+
+@keyframes graph-node-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes graph-edge-pulse {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.65;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-graph-background .graph-map__node,
+  .home-graph-background .graph-map__edge {
+    animation: none;
   }
 }
