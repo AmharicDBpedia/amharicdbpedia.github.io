@@ -58,7 +58,7 @@ function memberCard(member: (typeof teamMembers)[number]): HTMLElement {
   affiliation.textContent = member.affiliation;
   content.append(name, role, affiliation);
   if (member.href) {
-    content.append(externalLink(member.href, member.profileLabel ?? "University profile"));
+    content.append(externalLink(member.href, member.profileLabel ?? "Profile"));
   }
   card.append(content, period);
   return card;

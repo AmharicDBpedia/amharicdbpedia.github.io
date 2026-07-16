@@ -384,7 +384,7 @@ export const teamMembers: readonly TeamMember[] = [
     period: "2025–present",
     image: "/assets/images/andargachew-asfaw.png",
     href: "https://contact-andy.github.io/",
-    profileLabel: "Personal profile",
+    profileLabel: "Profile",
   },
   {
     name: "Hizkiel Mitiku Alemayehu",
@@ -393,7 +393,7 @@ export const teamMembers: readonly TeamMember[] = [
     status: "active",
     period: "2024–present",
     image: "/assets/images/hizkiel-mitiku.jpg",
-    href: "https://www.uni-paderborn.de/en/person/90387",
+    href: "https://dice-research.org/HizkielMitikuAlemayehu/",
   },
   {
     name: "Tilahun Abedissa Taffa",

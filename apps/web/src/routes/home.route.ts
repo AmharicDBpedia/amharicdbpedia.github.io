@@ -79,6 +79,19 @@ export function renderHome(layout: AppLayout): void {
   }
   quickStart.append(quickStartHeading, quickStartGrid);
 
-  page.append(hero, quickStart);
+  page.append(renderHomeAmbient(), hero, quickStart);
   layout.main.append(page);
+}
+
+function renderHomeAmbient(): HTMLElement {
+  const ambient = document.createElement("div");
+  ambient.className = "home-ambient";
+  ambient.setAttribute("aria-hidden", "true");
+  ambient.append(
+    document.createElement("span"),
+    document.createElement("span"),
+    document.createElement("span"),
+    document.createElement("span"),
+  );
+  return ambient;
 }

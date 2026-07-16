@@ -164,6 +164,98 @@ main:focus {
   padding: var(--space-8) 0 var(--space-10);
 }
 
+.home-ambient {
+  position: absolute;
+  z-index: 0;
+  top: 8%;
+  right: -8rem;
+  width: min(560px, 52vw);
+  aspect-ratio: 1;
+  border: 1px solid rgba(0, 95, 115, 0.12);
+  border-radius: 50%;
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.home-ambient::before,
+.home-ambient::after {
+  position: absolute;
+  inset: 14%;
+  border: 1px solid rgba(155, 93, 229, 0.16);
+  border-radius: 50%;
+  content: "";
+  animation: home-orbit 18s linear infinite;
+}
+
+.home-ambient::after {
+  inset: 29%;
+  border-color: rgba(224, 122, 95, 0.2);
+  animation-direction: reverse;
+  animation-duration: 12s;
+}
+
+.home-ambient span {
+  position: absolute;
+  width: 0.7rem;
+  height: 0.7rem;
+  border: 2px solid var(--color-primary);
+  border-radius: 50%;
+  background: var(--color-bg);
+  box-shadow: 0 0 0 0.45rem rgba(0, 95, 115, 0.08);
+  animation: home-node-pulse 4s ease-in-out infinite;
+}
+
+.home-ambient span:nth-child(1) {
+  top: 18%;
+  left: 24%;
+}
+
+.home-ambient span:nth-child(2) {
+  top: 33%;
+  right: 14%;
+  border-color: var(--color-accent);
+  animation-delay: -1.2s;
+}
+
+.home-ambient span:nth-child(3) {
+  right: 29%;
+  bottom: 16%;
+  border-color: var(--color-warm);
+  animation-delay: -2.4s;
+}
+
+.home-ambient span:nth-child(4) {
+  bottom: 29%;
+  left: 17%;
+  animation-delay: -3.1s;
+}
+
+@keyframes home-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes home-node-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.65;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-ambient::before,
+  .home-ambient::after,
+  .home-ambient span {
+    animation: none;
+  }
+}
+
 .hero__copy {
   display: grid;
   gap: var(--space-4);
@@ -303,6 +395,8 @@ h3 {
 }
 
 .home-quick-start {
+  position: relative;
+  z-index: 1;
   margin: var(--space-8) 0;
   padding: var(--space-6) 0;
   border-top: 1px solid var(--color-border);
