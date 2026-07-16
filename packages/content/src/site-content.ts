@@ -393,7 +393,7 @@ export const teamMembers: readonly TeamMember[] = [
     status: "active",
     period: "2024–present",
     image: "/assets/images/hizkiel-mitiku.jpg",
-    href: "https://www.uni-paderborn.de/en/",
+    href: "https://www.uni-paderborn.de/en/person/90387",
   },
   {
     name: "Tilahun Abedissa Taffa",
@@ -402,7 +402,7 @@ export const teamMembers: readonly TeamMember[] = [
     status: "active",
     period: "2024–present",
     image: "/assets/images/tilahun-taffa.jpg",
-    href: "https://www.uni-hamburg.de/en.html",
+    href: "https://www.leuphana.de/en/institutes/iis/persons/tilahun-taffa.html",
   },
   {
     name: "Meti Bayissa",
@@ -411,7 +411,7 @@ export const teamMembers: readonly TeamMember[] = [
     status: "previous",
     period: "GSoC 2024",
     image: "/assets/images/meti-bayissa.jpg",
-    href: "https://www.aau.edu.et/",
+    href: "https://www.linkedin.com/in/metiadanebayissa/",
   },
   {
     name: "Prof. Dr. Ricardo Usbeck",
@@ -420,7 +420,7 @@ export const teamMembers: readonly TeamMember[] = [
     status: "active",
     period: "2024–present",
     image: "/assets/images/ricardo-usbeck.jpg",
-    href: "https://www.leuphana.de/en/research.html",
+    href: "https://www.leuphana.de/en/institutes/iis/persons/ricardo-usbeck.html",
   },
   {
     name: "Prof. Dr. Axel-Cyrille Ngonga Ngomo",
@@ -429,6 +429,6 @@ export const teamMembers: readonly TeamMember[] = [
     status: "active",
     period: "2024–present",
     image: "/assets/images/axel-ngonga.png",
-    href: "https://www.uni-paderborn.de/en/",
+    href: "https://www.uni-paderborn.de/en/person/65716",
   },
 ];

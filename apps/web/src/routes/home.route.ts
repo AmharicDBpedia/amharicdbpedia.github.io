@@ -44,7 +44,7 @@ export function renderHome(layout: AppLayout): void {
   quickStartTitle.textContent = "Start with a question";
   const quickStartIntro = document.createElement("p");
   quickStartIntro.textContent =
-    "Choose the shortest path to the part of Amharic DBpedia you want to explore.";
+    "Choose the path to the part of Amharic DBpedia you want to explore.";
   quickStartHeading.append(quickStartTitle, quickStartIntro);
   const quickStartGrid = document.createElement("div");
   quickStartGrid.className = "home-quick-start__grid";
@@ -79,39 +79,6 @@ export function renderHome(layout: AppLayout): void {
   }
   quickStart.append(quickStartHeading, quickStartGrid);
 
-  page.append(renderHomeGraphBackground(), hero, quickStart);
+  page.append(hero, quickStart);
   layout.main.append(page);
-}
-
-function renderHomeGraphBackground(): HTMLElement {
-  const background = document.createElement("div");
-  background.className = "home-graph-background";
-  background.setAttribute("aria-hidden", "true");
-  const graph = document.createElement("div");
-  graph.className = "graph-map";
-  for (const edge of [
-    "graph-map__edge--one",
-    "graph-map__edge--two",
-    "graph-map__edge--three",
-    "graph-map__edge--four",
-  ]) {
-    const edgeElement = document.createElement("span");
-    edgeElement.className = `graph-map__edge ${edge}`;
-    graph.append(edgeElement);
-  }
-  for (const [index, node] of [
-    "Amharic",
-    "RDF",
-    "Ethiopia",
-    "DBpedia",
-    "Wiki",
-    "SPARQL",
-  ].entries()) {
-    const nodeElement = document.createElement("span");
-    nodeElement.className = `graph-map__node graph-map__node--${index + 1}`;
-    nodeElement.textContent = node;
-    graph.append(nodeElement);
-  }
-  background.append(graph);
-  return background;
 }
