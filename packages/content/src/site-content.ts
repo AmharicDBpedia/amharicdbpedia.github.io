@@ -19,13 +19,13 @@ export const languages = {
 
 export const navigation: readonly NavItem[] = [
   { href: "/", label: { en: "Home", am: "መነሻ", de: "Start" } },
+  { href: "/news", label: { en: "News", am: "News", de: "Neuigkeiten" } },
   { href: "/about", label: { en: "About", am: "ስለ ፕሮጀክቱ", de: "Über" } },
   {
     href: "/tools",
     label: { en: "Resources", am: "Resources", de: "Ressourcen" },
   },
   { href: "/sparql", label: { en: "SPARQL", am: "SPARQL", de: "SPARQL" } },
-  { href: "/news", label: { en: "News", am: "News", de: "Neuigkeiten" } },
   { href: "/docs", label: { en: "Docs", am: "Docs", de: "Dokumentation" } },
   { href: "/team", label: { en: "Team", am: "ቡድን", de: "Team" } },
   {

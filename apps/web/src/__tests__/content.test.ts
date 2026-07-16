@@ -6,10 +6,10 @@ describe("web content", () => {
     expect(navigation).toHaveLength(8);
     expect(navigation.map((item) => item.href)).toEqual([
       "/",
+      "/news",
       "/about",
       "/tools",
       "/sparql",
-      "/news",
       "/docs",
       "/team",
       "https://github.com/AmharicDBpedia",
