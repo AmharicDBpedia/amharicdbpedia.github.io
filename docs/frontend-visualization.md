@@ -68,5 +68,31 @@ quiet. The inspector moves beneath it on narrow screens. Zoom buttons, arrow-key
 selection, visible focus, and fact-row actions supplement pointer interaction.
 There is no continuous or decorative animation.
 
+## Endpoint recovery and missing pages
+
+All native SPARQL requests share a 20-second timeout that includes reading the
+response body. Typed errors distinguish HTTP failures, network/offline errors,
+timeouts, invalid responses, input errors, and endpoint configuration problems.
+HTTP 502/503, 504, 429, 400, 401/403, and endpoint 404 have specific guidance.
+Server response bodies and raw exception messages are not placed in the error UI.
+Technical details expose the HTTP status or error category, without a stack trace.
+
+The shared recovery panel is used by the knowledge explorer, resource facts,
+property examples, native query results, RDF previews, and downloads. It offers
+explicit retry and a link to published datasets; failed downloads no longer use
+blocking browser alerts. Explorer search and query text survive retries. No
+automatic retry loop sends repeated requests to a failing service. DESCRIBE format
+aliases are retried only for HTTP 406, as before.
+
+The native query form is presented before the optional embedded Tentris workspace.
+Cross-origin iframe failures cannot be reliably inspected, so a user-triggered
+"Workspace not loading?" control provides reload and dataset navigation without
+claiming to diagnose the iframe's status.
+
+Unknown website paths render a responsive 404 page with Home, Resources, and
+resource search. This is separate from an endpoint HTTP 404, which does not imply
+a missing resource. GitHub Pages already publishes `404.html` from the built app;
+its fallback boots the router for deep links, including unknown paths.
+
 References: [Delaunay hit-testing](https://d3js.org/d3-delaunay/delaunay#delaunay_find)
 and [TanStack Virtual installation](https://tanstack.com/virtual/latest/docs/installation).

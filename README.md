@@ -24,6 +24,8 @@ documentation now live in the sibling `../agentic-dbpedia/` folder.
   and TanStack Virtual fact rows. SPARQL pages retain at most 1,000 triples at a time.
   See [visualization architecture and validation](docs/frontend-visualization.md)
   for interaction details, data boundaries, and endpoint requirements.
+- Shared recovery panels explain data-service failures and offer retries without
+  exposing raw server errors. Unknown website addresses have a dedicated 404 page.
 
 ## Prerequisites
 
