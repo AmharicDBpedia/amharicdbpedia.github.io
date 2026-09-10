@@ -584,11 +584,12 @@ Request body:
 
 ```json
 {
-  "source_dir": "/home/matania/Desktop/dbpedia/AmharicDBpediaChapter/amDbpediaDump/GSoC2025",
+  "source_dir": "/path/to/amharic-rdf-output",
   "run_name": "demo-gsoc2025-statistics",
   "dump_date": "20250820",
   "extraction_run_id": "GSoC2025",
   "use_native_def_stats": false,
+  "native_def_source_dir": null,
   "max_files": null
 }
 ```
@@ -691,29 +692,47 @@ The statistics request has:
 
 ```json
 {
-  "use_native_def_stats": true
+  "use_native_def_stats": true,
+  "native_def_source_dir": "/path/to/website/data/def-native-layout"
 }
 ```
 
 What it does:
 
 ```text
-It calls extraction/scripts/run_statistics.sh.
+The Python statistics engine scans source_dir.
+The DEF-native engine scans native_def_source_dir.
+It calls extraction/scripts/run_statistics.sh for the native engine.
 That script wraps ../extraction-framework/scripts/src/main/bash/collectStats.sh.
 collectStats.sh runs DEF TypeStatistics and StatsPostProcessing.
+```
+
+Prepare and run both statistics engines from the website repository:
+
+```bash
+bash extraction/scripts/prepare_def_statistics_layout.sh \
+  /path/to/amharic-rdf-output \
+  data/def-native-layout
+
+cd backend
+.venv/bin/python -m amdb.cli.statistics \
+  --source-dir /path/to/amharic-rdf-output \
+  --native-def-source-dir ../data/def-native-layout \
+  --run-name combined-statistics \
+  --use-native-def-stats
 ```
 
 What to explain:
 
 ```text
-The official DEF statistics tools are preserved, but they require DEF's release
-directory layout, usually core-i18n/<wiki>/<dataset>_<wiki>.ttl.bz2. They can
-also require Java 8 and high heap settings.
+The official DEF statistics tools require DEF's release directory layout,
+usually core-i18n/<wiki>/<dataset>_<wiki>.ttl.bz2. The preparation script builds
+that layout with links while leaving the original RDF extraction untouched.
 
-For flat local demo folders like amDbpediaDump/GSoC2025, the Python streaming
-statistics engine is the feasible default. It produces the dynamic API numbers
-we need today while keeping the official DEF stats path available for release
-layouts.
+The wrapper selects Java 8 and applies the Jackson compatibility jar required by
+the current sibling extraction-framework checkout. If short abstracts are
+absent, the preparation script clearly reports that labels are used as the
+instance-count proxy.
 ```
 
 ## API 7: Read Latest Statistics

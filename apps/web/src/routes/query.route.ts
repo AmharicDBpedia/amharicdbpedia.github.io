@@ -2,7 +2,7 @@ import { queryExamples } from "@amdb/content";
 import { pickLocalized } from "@amdb/core";
 import { env } from "../app/env";
 import type { AppLayout } from "../app/layout";
-import { clear, externalLink } from "../dom/html";
+import { appendIconLabel, clear, externalLink } from "../dom/html";
 import { select } from "../services/sparql.service";
 
 export function renderQuery(layout: AppLayout): void {
@@ -50,7 +50,10 @@ export function renderQuery(layout: AppLayout): void {
   tentrisCopy.append(tentrisEyebrow, tentrisTitle, tentrisDescription);
   const tentrisExternal = externalLink(env.sparqlUi, "Open in new tab");
   tentrisExternal.className = "button-link";
-  tentrisHeader.append(tentrisCopy, tentrisExternal);
+  const tentrisActions = document.createElement("div");
+  tentrisActions.className = "tentris-workspace__actions";
+  tentrisActions.append(tentrisExternal);
+  tentrisHeader.append(tentrisCopy, tentrisActions);
 
   const tentrisFrame = document.createElement("iframe");
   tentrisFrame.className = "tentris-frame";
@@ -59,6 +62,7 @@ export function renderQuery(layout: AppLayout): void {
   tentrisFrame.loading = "eager";
   tentrisFrame.referrerPolicy = "no-referrer";
   tentrisFrame.setAttribute("allow", "clipboard-read; clipboard-write");
+  tentrisFrame.setAttribute("fetchpriority", "high");
 
   const tentrisFallback = document.createElement("p");
   tentrisFallback.className = "tentris-workspace__fallback";
@@ -81,7 +85,7 @@ export function renderQuery(layout: AppLayout): void {
   controls.className = "query-controls";
   const run = document.createElement("button");
   run.type = "button";
-  run.textContent = "Run query";
+  appendIconLabel(run, "play", "Run query");
   const status = document.createElement("span");
   status.className = "status";
   controls.append(run, status);
@@ -107,7 +111,7 @@ export function renderQuery(layout: AppLayout): void {
     pre.append(code);
     const load = document.createElement("button");
     load.type = "button";
-    load.textContent = "Load example";
+    appendIconLabel(load, "code", "Load example");
     load.addEventListener("click", () => {
       textarea.value = example.query;
       textarea.focus();

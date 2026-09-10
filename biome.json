@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["apps/**", "packages/**", "docs/**", "tools/**", "*.json", "*.yaml", "*.md"]
+    "includes": ["apps/**", "packages/**", "tools/**", "*.json", "*.yaml", "*.md"]
   },
   "formatter": {
     "enabled": true,

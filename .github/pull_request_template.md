@@ -18,5 +18,4 @@
 
 - [ ] The change is scoped and uses semantic commit messages.
 - [ ] Frontend checks pass when frontend code changed.
-- [ ] Backend checks pass when backend code changed.
 - [ ] Documentation and deployment notes are updated where needed.

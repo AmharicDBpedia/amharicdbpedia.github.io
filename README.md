@@ -1,55 +1,49 @@
 # Amharic DBpedia Website
 
-Standalone Amharic DBpedia web and automation project consolidated from the
-`AmharicDBpediaChapter` sibling repository.
+Frontend workspace for the Amharic DBpedia chapter website.
 
-The repository contains the major maintained product components without legacy static
-pages, generated RDF dumps, Python virtual environments, or build caches:
+This folder contains the browser-facing project only:
 
 - `apps/web/`: Vite-powered vanilla TypeScript website.
 - `packages/core/`: typed RDF, IRI, SPARQL, and graph helpers.
 - `packages/content/`: multilingual chapter content and query examples.
-- `backend/`: FastAPI automation service and tests.
-- `extraction/`: wrappers and configuration for a sibling DBpedia Extraction Framework.
-- `data/`: empty runtime directories for dumps, reports, and extraction runs.
-- `docs/`: architecture, contributor, pipeline, and API demo documentation.
+
+Backend automation, extraction scripts, runtime data folders, and backend
+documentation now live in the sibling `../agentic-dbpedia/` folder.
+
+## Current Frontend Scope
+
+- Static chapter pages for news, datasets, statistics, SPARQL, resources, and team.
+- Resource explorer examples are checked against the public Amharic DBpedia SPARQL endpoint.
+- The top navigation links to the Amharic DBpedia GitHub organization at
+  <https://github.com/AmharicDBpedia>.
+- Amharic UI text falls back to English when the Amharic copy is missing or is not a reliable
+  translation.
+- Tentris is embedded on the SPARQL page with a preconnect hint for faster startup.
 
 ## Prerequisites
 
 - Node.js 22+
 - pnpm 10+
-- Python 3.12+
-- [uv](https://docs.astral.sh/uv/)
-- Optional for real extraction runs: `../extraction-framework`
 
 ## Run Locally
 
-Install frontend and backend dependencies:
+Install frontend dependencies:
 
 ```bash
 just setup
 ```
 
-Run FastAPI:
-
-```bash
-just api
-```
-
-Run the website in another terminal:
+Run the website:
 
 ```bash
 just dev
 ```
 
-Open:
+Open: <http://127.0.0.1:5174>
 
-- Website: <http://127.0.0.1:5174>
-- Automation page: <http://127.0.0.1:5174/automation>
-- FastAPI OpenAPI UI: <http://127.0.0.1:8000/api/docs>
-
-Vite proxies `/api` to FastAPI during local development. For separate production
-origins, set `VITE_AMDB_API_BASE`.
+The frontend can call a separately running backend by setting
+`VITE_AMDB_API_BASE`.
 
 ## Verification
 
@@ -57,32 +51,14 @@ origins, set `VITE_AMDB_API_BASE`.
 just check
 ```
 
-Run `just --list` to see the individual frontend, backend, and extraction commands.
+Use `just --list` for individual frontend commands.
 
-## Git Hooks and CI
+## Git Hooks And CI
 
 `pnpm install` configures Husky hooks:
 
 - `pre-commit` runs frontend formatting and lint checks.
-- `pre-push` runs frontend typechecking, tests, build, and backend checks.
+- `pre-push` runs frontend typechecking, tests, and build.
 
-GitHub Actions runs frontend CI, backend CI, PR metadata validation, and GitHub Pages
-deployment as separate workflows. The frontend is deployed to:
-
-<https://amharic-dbpedia.github.io/website/>
-
-Before the first Actions deployment, a repository administrator must change
-**Settings > Pages > Build and deployment > Source** to **GitHub Actions**. Subsequent
-pushes to `main` deploy automatically.
-
-## Extraction Framework Boundary
-
-The backend expects the DBpedia Extraction Framework checkout at
-`../extraction-framework` by default. Override it when needed:
-
-```bash
-export AMDB_DEF_DIR=/absolute/path/to/extraction-framework
-```
-
-The web application consumes published RDF through the Amharic SPARQL endpoint and
-Databus. It does not bundle generated RDF dumps into the browser.
+GitHub Actions in this folder run frontend CI, PR metadata validation, and
+GitHub Pages deployment.

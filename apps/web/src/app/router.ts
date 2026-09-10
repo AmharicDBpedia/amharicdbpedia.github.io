@@ -27,9 +27,21 @@ const routes: readonly RouteDefinition[] = [
       import("../routes/home.route").then((m) => m.renderHome(layout)),
   },
   {
-    pathname: "/datasets",
+    pathname: "/about",
     handler: (_params, _url, layout) =>
-      import("../routes/datasets.route").then((m) => m.renderDatasets(layout)),
+      import("../routes/about.route").then((m) => m.renderAbout(layout)),
+  },
+  {
+    pathname: "/docs",
+    handler: (_params, _url, layout) =>
+      import("../routes/docs.route").then((m) => m.renderDocs(layout)),
+  },
+  {
+    pathname: "/docs/:slug",
+    handler: (params, _url, layout) =>
+      import("../routes/docs-detail.route").then((m) =>
+        m.renderDocsDetail(layout, params.slug ?? ""),
+      ),
   },
   {
     pathname: "/news",
@@ -37,14 +49,9 @@ const routes: readonly RouteDefinition[] = [
       import("../routes/news.route").then((m) => m.renderNews(layout)),
   },
   {
-    pathname: "/statistics",
+    pathname: "/tools",
     handler: (_params, _url, layout) =>
-      import("../routes/statistics.route").then((m) => m.renderStatistics(layout)),
-  },
-  {
-    pathname: "/automation",
-    handler: (_params, _url, layout) =>
-      import("../routes/automation.route").then((m) => m.renderAutomation(layout)),
+      import("../routes/tools.route").then((m) => m.renderTools(layout)),
   },
   {
     pathname: "/query",
@@ -62,14 +69,24 @@ const routes: readonly RouteDefinition[] = [
       import("../routes/team.route").then((m) => m.renderTeam(layout)),
   },
   {
-    pathname: "/docs",
+    pathname: "/resource",
     handler: (_params, _url, layout) =>
-      import("../routes/docs.route").then((m) => m.renderDocs(layout)),
+      import("../routes/resource-directory.route").then((m) => m.renderResourceDirectory(layout)),
+  },
+  {
+    pathname: "/resource-preview",
+    handler: (_params, url, layout) =>
+      import("../routes/resource-preview.route").then((m) => m.renderResourcePreview(layout, url)),
   },
   {
     pathname: "/resource/:title",
     handler: (params, _url, layout) =>
       import("../routes/resource.route").then((m) => m.renderResource(layout, params.title ?? "")),
+  },
+  {
+    pathname: "/property/:iri",
+    handler: (params, _url, layout) =>
+      import("../routes/property.route").then((m) => m.renderProperty(layout, params.iri ?? "")),
   },
 ];
 
@@ -91,10 +108,19 @@ export function installRouter(layout: AppLayout): void {
 }
 
 export async function navigate(href: string, layout: AppLayout, replace = false): Promise<void> {
+  const openMenu = document.querySelector<HTMLButtonElement>(".site-nav__toggle");
+  document.querySelector(".site-header")?.classList.remove("site-header--menu-open");
+  if (openMenu) {
+    openMenu.ariaExpanded = "false";
+    openMenu.ariaLabel = "Open navigation";
+  }
   const url = new URL(appHref(href), window.location.origin);
   if (replace) history.replaceState({}, "", url);
   else history.pushState({}, "", url);
   await dispatch(url, layout);
+  if (url.hash) {
+    document.querySelector(url.hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 export async function dispatch(url: URL, layout: AppLayout): Promise<void> {

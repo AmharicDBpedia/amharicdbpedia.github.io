@@ -10,6 +10,7 @@ __pycache__/
 *.py[cod]
 
 backend/.venv/
+backend/.env
 backend/.ruff_cache/
 backend/.mypy_cache/
 backend/.pytest_cache/
@@ -18,7 +19,10 @@ data/raw/*
 data/sanitized/*
 data/def-runs/*
 data/reports/*
+data/def-native-layout/*
 !data/raw/.gitkeep
 !data/sanitized/.gitkeep
 !data/def-runs/.gitkeep
 !data/reports/.gitkeep
+!data/def-native-layout/.gitkeep
+.serena

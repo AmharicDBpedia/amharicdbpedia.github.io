@@ -2,16 +2,31 @@ import { navigation, newsItems } from "@amdb/content";
 import { describe, expect, it } from "vitest";
 
 describe("web content", () => {
-  it("exposes the resource viewer route", () => {
-    expect(navigation.map((item) => item.href)).toContain("/resource/ደብረ_ብርሃን");
+  it("keeps the primary navigation focused", () => {
+    expect(navigation).toHaveLength(8);
+    expect(navigation.map((item) => item.href)).toEqual([
+      "/",
+      "/news",
+      "/about",
+      "/tools",
+      "/sparql",
+      "/docs",
+      "/team",
+      "https://github.com/AmharicDBpedia",
+    ]);
   });
 
-  it("exposes news as a primary navigation destination", () => {
-    expect(navigation.map((item) => item.href)).toContain("/news");
+  it("labels the resource destination clearly", () => {
+    expect(navigation.map((item) => item.href)).toContain("/tools");
+    expect(navigation.find((item) => item.href === "/tools")?.label.en).toBe("Resources");
   });
 
-  it("exposes backend automation as a primary navigation destination", () => {
-    expect(navigation.map((item) => item.href)).toContain("/automation");
+  it("exposes about as a primary navigation destination", () => {
+    expect(navigation.map((item) => item.href)).toContain("/about");
+  });
+
+  it("does not expose backend automation in primary navigation", () => {
+    expect(navigation.map((item) => item.href)).not.toContain("/automation");
   });
 
   it("publishes chapter news in reverse chronological order", () => {
@@ -29,8 +44,6 @@ describe("web content", () => {
 
     expect(latest?.title.en).toContain("LREC 2026");
     expect(latest?.href).toBe("https://lrec.elra.info/lrec2026-main-627");
-    expect(latest?.links?.map((link) => link.href)).toContain(
-      "https://github.com/Amharic-DBpedia/",
-    );
+    expect(latest?.links?.map((link) => link.href)).toContain("https://github.com/AmharicDBpedia");
   });
 });

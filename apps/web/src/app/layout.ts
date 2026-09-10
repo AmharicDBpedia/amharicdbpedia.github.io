@@ -9,11 +9,7 @@ export interface AppLayout {
   readonly getLanguage: () => SupportedLanguage;
 }
 
-export function createLayout(
-  root: HTMLElement,
-  initialLanguage: SupportedLanguage,
-  onLanguageChange: (language: SupportedLanguage) => void,
-): AppLayout {
+export function createLayout(root: HTMLElement, initialLanguage: SupportedLanguage): AppLayout {
   let language = initialLanguage;
 
   const shell = document.createElement("div");
@@ -27,18 +23,12 @@ export function createLayout(
   footer.className = "site-footer";
   const footerInner = document.createElement("div");
   footerInner.className = "site-footer__inner";
-  footerInner.textContent = "Amharic DBpedia Chapter";
+  footerInner.textContent = `Amharic DBpedia Chapter · ${new Date().getFullYear()}`;
   footer.append(footerInner);
 
   function renderHeader(): void {
     const header = renderSiteHeader({
       navigation,
-      language,
-      onLanguageChange: (next) => {
-        language = next;
-        renderHeader();
-        onLanguageChange(next);
-      },
       localize: (value) => pickLocalized(value, language) ?? "",
     });
 

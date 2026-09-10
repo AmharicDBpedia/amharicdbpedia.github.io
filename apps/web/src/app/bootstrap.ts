@@ -1,5 +1,5 @@
 import { createLayout } from "./layout";
-import { getPreferredLanguage, setPreferredLanguage } from "./preferences.store";
+import { getPreferredLanguage } from "./preferences.store";
 import { dispatch, installRouter } from "./router";
 
 export function bootstrap(): void {
@@ -9,11 +9,7 @@ export function bootstrap(): void {
   const initialLanguage = getPreferredLanguage();
   document.documentElement.lang = initialLanguage;
 
-  const layout = createLayout(root, initialLanguage, (language) => {
-    setPreferredLanguage(language);
-    document.documentElement.lang = language;
-    void dispatch(new URL(window.location.href), layout);
-  });
+  const layout = createLayout(root, initialLanguage);
 
   installRouter(layout);
   void dispatch(new URL(window.location.href), layout);
