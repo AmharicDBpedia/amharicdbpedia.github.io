@@ -1,5 +1,6 @@
 import { dbpediaResourceIri, type SparqlJsonBinding } from "@amdb/core";
 import { env } from "../../app/env";
+import { EndpointError } from "../../services/endpoint-error";
 import { select } from "../../services/sparql.service";
 
 export const PAGE_SIZE = 1000;
@@ -20,7 +21,7 @@ export function pageQuery(resource: string, page: number): string {
       /[<>"{}|^`\\\s]/u.test(iri) ||
       [...iri].some((char) => char.charCodeAt(0) < 32))
   ) {
-    throw new Error("Enter an Amharic title or a valid HTTP resource IRI.");
+    throw new EndpointError("input");
   }
   // Ordering makes pages repeatable for a stable dataset; do not download a total count.
   return `SELECT ?subject ?predicate ?object WHERE {
@@ -40,7 +41,7 @@ export async function loadTriplePage(resource: string, page: number, signal: Abo
   const rows: Triple[] = [];
   for (const row of bindings.slice(0, PAGE_SIZE)) {
     if (!validTerm(row.subject) || !validTerm(row.predicate) || !validTerm(row.object)) {
-      throw new Error("The endpoint returned an invalid RDF row.");
+      throw new EndpointError("invalid-response");
     }
     rows.push({ subject: row.subject, predicate: row.predicate, object: row.object });
   }

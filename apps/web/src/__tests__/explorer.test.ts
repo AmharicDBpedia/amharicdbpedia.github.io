@@ -59,7 +59,7 @@ describe("bounded RDF pages", () => {
         ),
     );
     await expect(loadTriplePage("", 0, new AbortController().signal)).rejects.toThrow(
-      "invalid RDF row",
+      "invalid-response",
     );
   });
 });
