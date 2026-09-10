@@ -98,7 +98,7 @@ test("resource and RDF preview failures use recovery panels", async ({ page }) =
   await expect(page.getByRole("alert")).toContainText("RDF preview");
 });
 
-test("query retry keeps the editor content and returns to results", async ({ page }) => {
+test("query retry keeps the editor content and returns to results", async ({ page }, testInfo) => {
   let status = 504;
   await page.route("**/sparql?**", (route) =>
     route.fulfill({
@@ -113,6 +113,11 @@ test("query retry keeps the editor content and returns to results", async ({ pag
   await editor.fill(query);
   await page.getByRole("button", { name: "Run query", exact: true }).click();
   await expect(page.getByRole("alert")).toContainText("The data service took too long");
+  await page.getByRole("alert").getByText("Technical details").click();
+  await page.locator(".sparql-workbench").screenshot({
+    path: testInfo.outputPath("sparql-error.png"),
+    style: ".site-header { visibility: hidden; }",
+  });
   status = 200;
   await page.getByRole("button", { name: "Retry loading" }).click();
   await expect(page.getByRole("status")).toContainText("0 rows returned");

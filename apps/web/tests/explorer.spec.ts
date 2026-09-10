@@ -48,7 +48,10 @@ test("virtualizes a thousand facts, pages, and supports keyboard inspection", as
   await page.getByRole("button", { name: "Zoom in", exact: true }).click();
   await page.getByRole("button", { name: "Reset view" }).click();
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.screenshot({ path: testInfo.outputPath("resources-explorer.png"), fullPage: true });
+  await page.locator(".atlas").screenshot({
+    path: testInfo.outputPath("resources-explorer.png"),
+    style: ".site-header { visibility: hidden; }",
+  });
   await page.getByRole("button", { name: "Next page" }).click();
   await expect(page.locator(".atlas-status")).toContainText("Facts 1,001–1,003");
   await expect(page.getByRole("button", { name: "Next page" })).toBeDisabled();
