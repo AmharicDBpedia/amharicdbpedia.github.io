@@ -1,6 +1,7 @@
 import { compactIri, type Iri, resourceToEgoGraph } from "@amdb/core";
 import type { AppLayout } from "../app/layout";
 import { appHref } from "../app/paths";
+import { renderEndpointError } from "../components/endpoint-error";
 import { renderPropertyTable } from "../components/property-table";
 import { appendIconLabel, clear, externalLink } from "../dom/html";
 import { renderEgoGraph } from "../features/graph/ego-graph";
@@ -76,6 +77,7 @@ export async function renderResource(layout: AppLayout, title: string): Promise<
     head.append(headRow);
     const body = document.createElement("tbody");
     rawActions.append(caption, head, body);
+    const downloadFeedback = document.createElement("div");
     for (const format of [
       ["turtle", "Turtle (.ttl)"],
       ["jsonld", "JSON-LD (.jsonld)"],
@@ -98,8 +100,13 @@ export async function renderResource(layout: AppLayout, title: string): Promise<
       download.type = "button";
       download.className = "button-link button-link--primary";
       appendIconLabel(download, "download", "Download");
-      download.addEventListener("click", () => {
-        void downloadRaw(resource.iri, format[0]);
+      download.addEventListener("click", async () => {
+        download.disabled = true;
+        try {
+          await downloadRaw(resource.iri, format[0], downloadFeedback);
+        } finally {
+          download.disabled = false;
+        }
       });
       const previewCell = document.createElement("td");
       previewCell.append(preview);
@@ -108,7 +115,7 @@ export async function renderResource(layout: AppLayout, title: string): Promise<
       row.append(name, previewCell, downloadCell);
       body.append(row);
     }
-    header.append(rawActions);
+    header.append(rawActions, downloadFeedback);
 
     const typeLine = document.createElement("p");
     typeLine.className = "resource-types";
@@ -142,8 +149,9 @@ export async function renderResource(layout: AppLayout, title: string): Promise<
     section.append(header, summaryCards, typeLine, graph, table);
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") return;
-    loading.textContent = error instanceof Error ? error.message : "Failed to load resource";
-    loading.className = "status status--error";
+    loading.replaceWith(
+      renderEndpointError(error, () => renderResource(layout, title), "Resource facts"),
+    );
   }
 }
 
@@ -163,7 +171,12 @@ function renderNoFacts(iri: string): HTMLElement {
   return panel;
 }
 
-async function downloadRaw(iri: Iri, format: RawResourceFormat): Promise<void> {
+async function downloadRaw(
+  iri: Iri,
+  format: RawResourceFormat,
+  feedback: HTMLElement,
+): Promise<void> {
+  feedback.textContent = "Preparing RDF download...";
   try {
     const raw = await loadRawResource(iri, format);
     const blob = new Blob([raw], { type: formatMime(format) });
@@ -173,9 +186,11 @@ async function downloadRaw(iri: Iri, format: RawResourceFormat): Promise<void> {
     link.download = `${resourceFileName(iri)}.${formatExtension(format)}`;
     link.click();
     URL.revokeObjectURL(url);
+    feedback.textContent = "Download ready.";
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to download RDF";
-    window.alert(message);
+    feedback.replaceChildren(
+      renderEndpointError(error, () => downloadRaw(iri, format, feedback), "RDF download"),
+    );
   }
 }
 

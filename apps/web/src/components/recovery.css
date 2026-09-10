@@ -1,0 +1,133 @@
+.recovery-panel {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 1rem;
+  padding: clamp(1rem, 3vw, 2rem);
+  margin: 1rem 0;
+  border: 1px solid #dfcba7;
+  border-left: 4px solid #ae7115;
+  border-radius: 12px;
+  background: #fffbf3;
+  color: #18364c;
+  text-align: left;
+}
+.recovery-panel__symbol {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid #ae7115;
+  border-radius: 50%;
+  color: #885508;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+.recovery-panel__eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.recovery-panel h2 {
+  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+  line-height: 1.3;
+  margin: 0.5rem 0;
+}
+.recovery-panel p {
+  max-width: 68ch;
+  margin: 0.5rem 0;
+  font-size: 0.92rem;
+}
+.recovery-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem 1.2rem;
+  margin-top: 1.2rem;
+}
+.recovery-panel__actions button {
+  background: #214868;
+  color: white;
+  min-height: 44px;
+}
+.recovery-panel__actions a {
+  font-size: 0.9rem;
+}
+.recovery-panel details {
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  color: #5b6570;
+}
+.recovery-panel summary {
+  cursor: pointer;
+  width: fit-content;
+}
+.recovery-panel code {
+  display: block;
+  margin-top: 0.5rem;
+}
+.recovery-panel :focus-visible,
+.missing-page :focus-visible {
+  outline: 3px solid #ae7115;
+  outline-offset: 4px;
+}
+.missing-page {
+  padding: clamp(2rem, 8vw, 6rem) 0;
+}
+.missing-page__intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.7fr);
+  gap: 3rem;
+  align-items: center;
+}
+.missing-page__code {
+  font-family: ui-monospace, monospace;
+  font-size: clamp(6rem, 16vw, 13rem);
+  line-height: 1;
+  letter-spacing: -0.1em;
+  color: #214868;
+  margin: 0;
+  justify-self: center;
+}
+.missing-page h1 {
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  color: #18364c;
+}
+.missing-page__label {
+  color: #168383;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.missing-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.8rem;
+}
+.missing-page__search {
+  padding: 1.5rem;
+  margin-top: 3rem;
+  border: 1px solid #b9cedc;
+  border-radius: 12px;
+  background: #f0f6fb;
+}
+.missing-page__search h2 {
+  font-size: 1.2rem;
+}
+.missing-page__search .resource-search {
+  margin-bottom: 0;
+}
+@media (max-width: 600px) {
+  .recovery-panel {
+    grid-template-columns: 1fr;
+  }
+  .missing-page__intro {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .missing-page__code {
+    grid-row: 1;
+    justify-self: start;
+  }
+}

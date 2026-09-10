@@ -1,11 +1,16 @@
 import type { AppLayout } from "./layout";
 import { appHref, appRoutePath } from "./paths";
 
+// biome-ignore lint/suspicious/noConfusingVoidType: Existing renderers return void; interactive routes may return cleanup.
+type RouteResult = void | (() => void);
+
 type RouteHandler = (
   params: Record<string, string>,
   url: URL,
   layout: AppLayout,
-) => Promise<void> | void;
+) => Promise<RouteResult> | RouteResult;
+
+let disposeRoute: (() => void) | undefined;
 
 interface RouteDefinition {
   readonly pathname: string;
@@ -124,6 +129,8 @@ export async function navigate(href: string, layout: AppLayout, replace = false)
 }
 
 export async function dispatch(url: URL, layout: AppLayout): Promise<void> {
+  disposeRoute?.();
+  disposeRoute = undefined;
   const pathname = appRoutePath(url.pathname);
   if (pathname === null) {
     const { renderNotFound } = await import("../routes/not-found.route");
@@ -134,7 +141,8 @@ export async function dispatch(url: URL, layout: AppLayout): Promise<void> {
   for (const route of routes) {
     const match = matchPath(route.pathname, pathname);
     if (!match) continue;
-    await route.handler(match, url, layout);
+    const dispose = await route.handler(match, url, layout);
+    if (typeof dispose === "function") disposeRoute = dispose;
     layout.main.focus({ preventScroll: true });
     return;
   }

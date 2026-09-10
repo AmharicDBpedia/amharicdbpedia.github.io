@@ -20,6 +20,12 @@ documentation now live in the sibling `../agentic-dbpedia/` folder.
 - Amharic UI text falls back to English when the Amharic copy is missing or is not a reliable
   translation.
 - Tentris is embedded on the SPARQL page with a preconnect hint for faster startup.
+- Resources includes an interactive Canvas knowledge graph with Delaunay hit-testing
+  and TanStack Virtual fact rows. SPARQL pages retain at most 1,000 triples at a time.
+  See [visualization architecture and validation](docs/frontend-visualization.md)
+  for interaction details, data boundaries, and endpoint requirements.
+- Shared recovery panels explain data-service failures and offer retries without
+  exposing raw server errors. Unknown website addresses have a dedicated 404 page.
 
 ## Prerequisites
 

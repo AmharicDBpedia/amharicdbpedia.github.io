@@ -13,6 +13,11 @@
   },
   "dependencies": {
     "@amdb/content": "workspace:*",
-    "@amdb/core": "workspace:*"
+    "@amdb/core": "workspace:*",
+    "@tanstack/virtual-core": "^3.17.9",
+    "d3-delaunay": "^6.0.4"
+  },
+  "devDependencies": {
+    "@types/d3-delaunay": "^6.0.4"
   }
 }

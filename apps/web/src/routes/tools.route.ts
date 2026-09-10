@@ -1,8 +1,9 @@
 import type { AppLayout } from "../app/layout";
 import { appHref } from "../app/paths";
 import { clear, externalLink, faIcon, type IconName } from "../dom/html";
+import { mountExplorer } from "../features/explorer/explorer";
 
-export function renderTools(layout: AppLayout): void {
+export function renderTools(layout: AppLayout): () => void {
   clear(layout.main);
 
   const section = document.createElement("section");
@@ -42,6 +43,7 @@ export function renderTools(layout: AppLayout): void {
   tools.append(toolGrid);
 
   const datasets = document.createElement("section");
+  datasets.id = "datasets";
   datasets.className = "tools-page__section";
   datasets.append(
     sectionHeading("Datasets", "Find the published graph and the mappings that shape it."),
@@ -90,8 +92,10 @@ export function renderTools(layout: AppLayout): void {
   );
   publication.append(publicationGrid);
 
-  section.append(title, intro, tools, datasets, publication);
+  const explorer = document.createElement("div");
+  section.append(title, intro, explorer, tools, datasets, publication);
   layout.main.append(section);
+  return mountExplorer(explorer);
 }
 
 function sectionHeading(title: string, description: string): HTMLElement {
