@@ -1,6 +1,7 @@
 import { compactIri, describePredicate, type Iri, toIri } from "@amdb/core";
 import type { AppLayout } from "../app/layout";
 import { appHref } from "../app/paths";
+import { renderEndpointError } from "../components/endpoint-error";
 import { renderRdfTerm } from "../components/property-table";
 import { clear, externalLink } from "../dom/html";
 import { loadPredicateUsage, type PredicateUsage } from "../services/property.service";
@@ -40,7 +41,9 @@ export async function renderProperty(layout: AppLayout, iriParam: string): Promi
     usagePanel.replaceWith(renderUsage(usage));
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") return;
-    usagePanel.replaceWith(renderUsageError(error));
+    usagePanel.replaceWith(
+      renderEndpointError(error, () => renderProperty(layout, iriParam), "Property examples"),
+    );
   }
 }
 
@@ -241,18 +244,6 @@ function renderUsage(usage: readonly PredicateUsage[]): HTMLElement {
 
   table.append(thead, tbody);
   section.append(table);
-  return section;
-}
-
-function renderUsageError(error: unknown): HTMLElement {
-  const section = document.createElement("section");
-  section.className = "property-panel";
-  const title = document.createElement("h2");
-  title.textContent = "Usage in Amharic DBpedia";
-  const status = document.createElement("p");
-  status.className = "status status--error";
-  status.textContent = error instanceof Error ? error.message : "Failed to load predicate examples";
-  section.append(title, status);
   return section;
 }
 

@@ -94,7 +94,9 @@ test("recovers from endpoint errors and renders an explicit empty state", async 
     }),
   );
   await page.goto(toolsPath);
-  await expect(page.locator(".atlas-status")).toContainText("Could not load facts");
+  await expect(page.getByRole("alert")).toContainText(
+    "The data service is temporarily unavailable",
+  );
   fail = false;
   await page.getByRole("button", { name: "Retry loading" }).click();
   await expect(page.locator(".atlas-status")).toContainText("No facts found");

@@ -1,5 +1,6 @@
 import { localName } from "@amdb/core";
 import { appHref } from "../../app/paths";
+import { renderEndpointError } from "../../components/endpoint-error";
 import { text } from "../../dom/html";
 import { loadTriplePage, PAGE_SIZE, type Triple } from "./data";
 import { buildGraph } from "./model";
@@ -25,6 +26,7 @@ export function mountExplorer(host: HTMLElement): () => void {
       <button type="submit">Explore connections</button><button type="button" data-action="all">Browse all</button></div>
     </form>
     <div class="atlas-examples"><span>Start with</span></div>
+    <div class="atlas-error"></div>
     <div class="atlas-toolbar"><h3>Relationship map</h3><span class="atlas-count"></span>
       <div class="atlas-zoom"><button type="button" data-action="out" aria-label="Zoom out">−</button>
       <button type="button" data-action="in" aria-label="Zoom in">+</button>
@@ -39,8 +41,7 @@ export function mountExplorer(host: HTMLElement): () => void {
     <p class="atlas-status" role="status"></p>
     <div class="atlas-facts"></div>
     <div class="atlas-pagination"><button type="button" data-action="previous">Previous page</button>
-      <span class="atlas-page"></span><button type="button" data-action="next">Next page</button>
-      <button type="button" data-action="retry" hidden>Retry loading</button></div>`;
+      <span class="atlas-page"></span><button type="button" data-action="next">Next page</button></div>`;
   host.append(root);
   function get<T extends HTMLElement>(selector: string): T {
     const element = root.querySelector<T>(selector);
@@ -52,7 +53,14 @@ export function mountExplorer(host: HTMLElement): () => void {
   const inspector = get(".atlas-inspector");
   const previous = get<HTMLButtonElement>('[data-action="previous"]');
   const next = get<HTMLButtonElement>('[data-action="next"]');
-  const retry = get<HTMLButtonElement>('[data-action="retry"]');
+  const errorHost = get(".atlas-error");
+  const dataPanels = [
+    ".atlas-toolbar",
+    ".atlas-workspace",
+    ".atlas-caption",
+    ".atlas-facts-heading",
+    ".atlas-facts",
+  ].map((selector) => get(selector));
   let rows: Triple[] = [];
   let resource = "";
   let page = 0;
@@ -107,13 +115,11 @@ export function mountExplorer(host: HTMLElement): () => void {
     request?.abort();
     const controller = new AbortController();
     request = controller;
-    const timeout = window.setTimeout(
-      () => controller.abort(new Error("Request timed out")),
-      20000,
-    );
     previous.disabled = true;
     next.disabled = true;
-    retry.hidden = true;
+    errorHost.replaceChildren();
+    get(".atlas-pagination").hidden = false;
+    for (const panel of dataPanels) panel.hidden = false;
     rows = [];
     facts.setRows(rows);
     network.setGraph(buildGraph(rows));
@@ -141,11 +147,11 @@ export function mountExplorer(host: HTMLElement): () => void {
       next.disabled = !result.hasNext;
     } catch (error) {
       if (disposed || request !== controller) return;
-      status.textContent = `Could not load facts. ${error instanceof Error ? error.message : "Endpoint unavailable."} Retry, or check the resource title.`;
-      get(".atlas-map-message").textContent = "Connections unavailable. Retry loading below.";
-      retry.hidden = false;
+      status.textContent = "";
+      for (const panel of dataPanels) panel.hidden = true;
+      get(".atlas-pagination").hidden = page === 0;
+      errorHost.replaceChildren(renderEndpointError(error, load, "Knowledge explorer"));
     } finally {
-      window.clearTimeout(timeout);
       if (!disposed && request === controller) {
         root.setAttribute("aria-busy", "false");
         previous.disabled = page === 0;
@@ -172,9 +178,6 @@ export function mountExplorer(host: HTMLElement): () => void {
   };
   next.onclick = () => {
     page++;
-    void load();
-  };
-  retry.onclick = () => {
     void load();
   };
   get('[data-action="in"]').onclick = () => network.zoom(1.3);

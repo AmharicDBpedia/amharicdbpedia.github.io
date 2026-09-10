@@ -43,6 +43,7 @@ export function renderTools(layout: AppLayout): () => void {
   tools.append(toolGrid);
 
   const datasets = document.createElement("section");
+  datasets.id = "datasets";
   datasets.className = "tools-page__section";
   datasets.append(
     sectionHeading("Datasets", "Find the published graph and the mappings that shape it."),

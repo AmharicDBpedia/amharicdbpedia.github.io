@@ -1,6 +1,7 @@
 import { toIri } from "@amdb/core";
 import type { AppLayout } from "../app/layout";
 import { appHref } from "../app/paths";
+import { renderEndpointError } from "../components/endpoint-error";
 import { clear } from "../dom/html";
 import { loadRawResource, type RawResourceFormat } from "../services/resource.service";
 
@@ -68,7 +69,9 @@ export async function renderResourcePreview(layout: AppLayout, url: URL): Promis
       );
     });
   } catch (error) {
-    code.textContent = error instanceof Error ? error.message : "Failed to load RDF preview";
+    pre.replaceWith(
+      renderEndpointError(error, () => renderResourcePreview(layout, url), "RDF preview"),
+    );
   }
 }
 

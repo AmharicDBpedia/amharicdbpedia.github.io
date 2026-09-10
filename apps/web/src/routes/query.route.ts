@@ -2,10 +2,12 @@ import { queryExamples } from "@amdb/content";
 import { pickLocalized } from "@amdb/core";
 import { env } from "../app/env";
 import type { AppLayout } from "../app/layout";
+import { renderEndpointError } from "../components/endpoint-error";
 import { appendIconLabel, clear, externalLink } from "../dom/html";
+import { EndpointError } from "../services/endpoint-error";
 import { select } from "../services/sparql.service";
 
-export function renderQuery(layout: AppLayout): void {
+export function renderQuery(layout: AppLayout): () => void {
   clear(layout.main);
   const language = layout.getLanguage();
 
@@ -53,13 +55,17 @@ export function renderQuery(layout: AppLayout): void {
   const tentrisActions = document.createElement("div");
   tentrisActions.className = "tentris-workspace__actions";
   tentrisActions.append(tentrisExternal);
+  const workspaceHelp = document.createElement("button");
+  workspaceHelp.type = "button";
+  workspaceHelp.textContent = "Workspace not loading?";
+  tentrisActions.append(workspaceHelp);
   tentrisHeader.append(tentrisCopy, tentrisActions);
 
   const tentrisFrame = document.createElement("iframe");
   tentrisFrame.className = "tentris-frame";
   tentrisFrame.src = env.sparqlUi;
   tentrisFrame.title = "Amharic DBpedia Tentris query interface";
-  tentrisFrame.loading = "eager";
+  tentrisFrame.loading = "lazy";
   tentrisFrame.referrerPolicy = "no-referrer";
   tentrisFrame.setAttribute("allow", "clipboard-read; clipboard-write");
   tentrisFrame.setAttribute("fetchpriority", "high");
@@ -71,7 +77,26 @@ export function renderQuery(layout: AppLayout): void {
     externalLink(env.sparqlUi, "open Tentris directly"),
     ".",
   );
-  tentris.append(tentrisHeader, tentrisFrame, tentrisFallback);
+  const workspaceRecovery = document.createElement("div");
+  const workspaceDetails = document.createElement("details");
+  const workspaceSummary = document.createElement("summary");
+  workspaceSummary.textContent = "Open embedded Tentris workspace";
+  workspaceDetails.append(workspaceSummary, tentrisFrame, tentrisFallback);
+  workspaceHelp.onclick = () => {
+    workspaceDetails.open = false;
+    workspaceRecovery.replaceChildren(
+      renderEndpointError(
+        new EndpointError("network"),
+        () => {
+          workspaceRecovery.replaceChildren();
+          tentrisFrame.src = env.sparqlUi;
+          workspaceDetails.open = true;
+        },
+        "Embedded query workspace",
+      ),
+    );
+  };
+  tentris.append(tentrisHeader, workspaceRecovery, workspaceDetails);
 
   const workbench = document.createElement("section");
   workbench.className = "sparql-workbench";
@@ -87,16 +112,29 @@ export function renderQuery(layout: AppLayout): void {
   run.type = "button";
   appendIconLabel(run, "play", "Run query");
   const status = document.createElement("span");
+  status.setAttribute("role", "status");
   status.className = "status";
   controls.append(run, status);
   const results = document.createElement("div");
   results.className = "query-results";
+  let activeRequest: AbortController | undefined;
+  const execute = async () => {
+    activeRequest?.abort();
+    const controller = new AbortController();
+    activeRequest = controller;
+    run.disabled = true;
+    try {
+      await runQuery(textarea.value, status, results, controller.signal, execute);
+    } finally {
+      if (activeRequest === controller) run.disabled = false;
+    }
+  };
   run.addEventListener("click", () => {
-    void runQuery(textarea.value, status, results);
+    void execute();
   });
   workbench.append(workbenchTitle, textarea, controls, results);
 
-  section.append(title, intro, endpointPanel, tentris, workbench);
+  section.append(title, intro, endpointPanel, workbench, tentris);
 
   for (const example of queryExamples) {
     const article = document.createElement("article");
@@ -121,9 +159,16 @@ export function renderQuery(layout: AppLayout): void {
   }
 
   layout.main.append(section);
+  return () => activeRequest?.abort();
 }
 
-async function runQuery(query: string, status: HTMLElement, mount: HTMLElement): Promise<void> {
+async function runQuery(
+  query: string,
+  status: HTMLElement,
+  mount: HTMLElement,
+  signal: AbortSignal,
+  retry: () => Promise<void>,
+): Promise<void> {
   clear(mount);
   if (!/\blimit\s+\d+/i.test(query)) {
     status.textContent = "Add a LIMIT before running public endpoint queries.";
@@ -135,12 +180,14 @@ async function runQuery(query: string, status: HTMLElement, mount: HTMLElement):
   status.className = "status";
 
   try {
-    const data = await select(env.sparqlEndpoint, query);
+    const data = await select(env.sparqlEndpoint, query, signal);
+    if (signal.aborted) return;
     status.textContent = `${data.results.bindings.length} rows returned`;
     mount.append(renderResultsTable(data.head.vars, data.results.bindings));
   } catch (error) {
-    status.textContent = error instanceof Error ? error.message : "Query failed";
-    status.className = "status status--error";
+    if (signal.aborted) return;
+    status.textContent = "";
+    mount.replaceChildren(renderEndpointError(error, retry, "SPARQL query"));
   }
 }
 
